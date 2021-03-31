@@ -1,0 +1,24 @@
+set (EXENAME ptc_make_flat)
+set (SRC_FILES
+  ptc_make_flat/ptc_make_flat.f90
+)
+
+set (LINK_LIBS
+  bmad
+  sim_utils
+#  cesr_utils
+  recipes_f-90_LEPP
+  fgsl
+  gsl
+  gslcblas
+  forest
+  xrlf03
+  xrl
+  lapack95
+  lapack
+  blas
+  hdf5hl_fortran
+  hdf5_hl
+  hdf5_fortran
+  hdf5
+)

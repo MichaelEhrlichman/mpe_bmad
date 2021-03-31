@@ -1,0 +1,96 @@
+parameter[particle] = electron
+parameter[e_tot] = 2.00000e+09
+
+!**********!
+!  Markers !
+!**********!
+
+   BPM     : marker
+
+!**********!
+!  Drifts !
+!**********!
+
+   L1 : DRIFT, L=     2.51960922 
+   L2 : DRIFT, L=     0.44450000 
+   L2a : DRIFT, L=     0.35548000 
+   L2b : DRIFT, L=     0.08902000 
+   L3 : DRIFT, L=     0.11400000 
+   L4 : DRIFT, L=     0.11750000 
+   L5 : DRIFT, L=     0.24869800 
+   L5a : DRIFT, L=     0.14298200 
+   L5b : DRIFT, L=     0.10571600 
+   L6 : DRIFT, L=     0.21569930 
+   L7 : DRIFT, L=     0.22450000 
+   L7a : DRIFT, L=     0.11878400 
+   L7b : DRIFT, L=     0.10571600 
+   L8 : DRIFT, L=     0.12450000 
+   L9 : DRIFT, L=     0.49069810 
+   L9a : DRIFT, L=     0.31184400 
+   L9b : DRIFT, L=     0.17885410 
+
+
+!**************!
+!  Quadrupoles !
+!**************!
+
+   QF : QUAD, L=   0.34400000, K1=  2.13879800  
+   QD : QUAD, L=   0.18700000, K1= -0.39507430  
+   QFA : QUAD, L=    0.44800000, K1= 3.60765700   
+
+!**********!
+!  Bends   ! 
+!**********!
+   BEND : sbend, L=0.86514000,  ANGLE= 0.17453293, E1=0.08726646, &
+               E2= 0.08726646,  K1 = -1.20965300, num_steps=40
+
+
+!**********!
+!  Sext   ! 
+!**********!
+
+   SF  : sext, L= 0.20300000, K2= 89.76507533 * 2
+   SD  : sext, L= 0.20300000, K2= -56.98535452 * 2
+   SHF : sext, L= 0.20300000, K2= 21.54638000 * 2
+   SHD : sext, L= 0.20300000, K2= -21.74546000 * 2
+
+  ! SF[k2] = 0
+  ! SD[k2] = 0
+  ! SHF[k2] = 0
+  ! SHD[k2] = 0
+
+  SECTOR: LINE = ( L1,   SHF, L2a, BPM, L2b,   QF,            & 
+                   L3,   SHD, L4,              QD,            &
+                   L5a,            BPM, L5b,            BEND, & 
+                   L6,   SD, L7a,  BPM, L7b,  QFA,            &
+                   L8,   SF, L9a,  BPM, L9b,            BEND, & 
+                   L9b,            BPM,                       & 
+                   L9a,  SF, L8,             QFA,            & 
+                   L7b,            BPM,                       & 
+                   L7a,  SD, L6,                       BEND, & 
+                   L5b,            BPM,                       &
+                   L5a,                        QD,            & 
+                   L4,   SHD, L3,              QF,            & 
+                   L2b,            BPM,                       & 
+                   L2a,  SHF,                                 &
+                   L1)
+
+  RING: LINE=(12*SECTOR)
+
+sbend[fringe_type] = linear_edge
+sextupole[num_steps] = 4
+!parameter[taylor_order] = 5
+parameter[ptc_exact_model] = .false.
+
+!4.1 Medium tight / relaxed
+*[aperture_type] = elliptical
+*[aperture_at] = both_ends
+*[x_limit] = 0.015
+*[y_limit] = 0.015
+sbend[x_limit] = 0.0195
+sbend[y_limit] = 0.00708
+
+use, ring
+
+
+

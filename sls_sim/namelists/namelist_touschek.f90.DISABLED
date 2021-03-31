@@ -1,0 +1,41 @@
+module namelist_touschek
+
+! provides:
+! tracking_method, periodic_about, rf_bucket, n_turn, dims, current, bunch_length, 
+! energy_spread, vertical_emittance, horizontal_emittance, aperture_file, stepping 
+
+use bmad
+
+implicit none
+
+integer tracking_method
+real(rp) rf_bucket
+integer n_turn
+integer dims
+real(rp) current
+real(rp) bunch_length
+real(rp) energy_spread
+real(rp) vertical_emittance
+real(rp) horizontal_emittance
+character*100 aperture_file
+character*10 stepping
+character*20 use_line
+integer n_ma_locs
+integer periodicity
+
+namelist / touschek /   tracking_method, &
+                        use_line, &
+                        periodicity, &
+                        rf_bucket, &
+                        n_turn, &          !Number of turns particle must survive
+                        dims, &            !either 4 or 6
+                        current, &
+                        energy_spread, &
+                        bunch_length, &
+                        vertical_emittance, &
+                        horizontal_emittance, &
+                        aperture_file, &
+                        stepping, &
+                        n_ma_locs
+
+end module

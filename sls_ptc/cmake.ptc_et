@@ -1,0 +1,20 @@
+set (EXENAME ptc_et)
+
+set (SRC_FILES
+  ptc_et/ptc_et.f90
+)
+
+set (LINK_LIBS
+#  bmad
+#  sim_utils
+#  recipes_f-90_LEPP
+#  fgsl
+#  gsl
+#  gslcblas
+  forest
+#  xrlf03
+#  xrl
+#  lapack95
+#  lapack
+#  blas
+)

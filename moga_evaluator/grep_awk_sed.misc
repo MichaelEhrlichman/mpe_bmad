@@ -1,0 +1,2 @@
+grep -v hours autotao.err*/00touschek/tl-6D.dat | awk '{print $2}' > s202656_clim10.tl
+grep Opti seed_*/00da/da.out | sed 's/\// /g' | awk '{printf "%-20s %10f   %10e\n", $1, $9, $10}' | sort -k2g > da.all.sortk2

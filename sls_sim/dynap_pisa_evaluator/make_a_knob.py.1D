@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import os
+
+data_file = "knob.grid"
+fitorder = 6
+
+structured_data = np.genfromtxt(data_file, skip_header=0, names=True)
+data = structured_data.view(np.float64).reshape(structured_data.shape + (-1,))
+# dQx data[:,0]
+# dQy data[:,1]
+# Var1 data[:,2]
+# Var2 data[:,3]
+# etc ...
+
+nPoints =  data.shape[0]
+nVars = data.shape[1] - 2
+
+print data[:,[0,1]]
+print np.polyfit(data[:,[0,1]], data[:,2], fitorder)
+bomb
+
+pf = []
+p = []
+plots = []
+for i in range(0,nVars):
+	pf.append(np.polyfit(data[:,[0,1]], data[:,i+2], fitorder))
+	p.append(np.poly1d(pf[i]))
+	print p[i]
+	plt.plot(data[:,0],p[i](data[:,0]),'k-')
+	pl, = plt.plot(data[:,0],data[:,i+2],'.')
+	plots.append(pl)
+
+fit_legend_line = mpl.lines.Line2D([], [], color='k')
+plots.append(fit_legend_line)
+legend_names = structured_data.dtype.names[2:] + ('fits',)
+
+plt.xlabel('delta tune')
+plt.ylabel('delta K2')
+plt.legend(plots,legend_names)
+plt.show()
+
+format_str = 'a*%0.3e+%0.3e'
+for n in range(2,fitorder+1):
+	format_str = 'a^'+str(n)+'*%0.3e+'+format_str
+
+f=open('knob.bmad','w')
+f.write('g1 : group = { &\n')
+for i in range(0,nVars):
+	if(i < nVars-1):
+		f.write(structured_data.dtype.names[i+2]+'[k1]:'+format_str%tuple(pf[i])+', &\n')
+	else:
+		f.write(structured_data.dtype.names[i+2]+'[k1]:'+format_str%tuple(pf[i])+'}, var = {a}\n')
+f.close()
+
+testf=open('test.results','w')
+print "Testing knob ..."
+a_min = data[0,0]
+a_max = data[-1,0]
+print 'Knob range is '+str(a_min)+' to '+str(a_max)
+for i in range(-10,11):
+	x=0.001*i
+	f=open('lat.bmad','w')
+	f.write('call, file = ../dc12a_alt3.bmad \n')
+	f.write('call, file = knob.bmad \n')
+	f.write('g1[a] = '+str(x)+'\n')
+	f.close()
+	stdout = os.popen("/afs/psi.ch/user/e/ehrlichman_m/bbin/tunes lat.bmad").read()
+	testf.write(str(x)+'   '+stdout.split()[-2:-1][0]+'   '+stdout.split()[-1:][0]+'\n')
+testf.close()
+
+testdata = np.genfromtxt('test.results')
+
+plt.plot(testdata[:,0],testdata[:,1],'-')
+plt.xlabel('knob a')
+plt.ylabel('Qx')
+plt.show()
+plt.plot(testdata[:,0],testdata[:,2],'-')
+plt.xlabel('knob a')
+plt.ylabel('Qy')
+plt.show()
+plt.plot(testdata[:,1],testdata[:,2],'-')
+plt.xlabel('Qx')
+plt.ylabel('Qy')
+plt.show()
+
+
+
+
+

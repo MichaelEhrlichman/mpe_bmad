@@ -1,0 +1,20 @@
+#!/bin/bash
+#$ -cwd
+#$ -N dynap_raster
+#$ -pe orte 64
+#$ -q prime_bd.q
+#$ -l s_rt=03:00:00,h_rt=03:59:30
+#$ -notify
+
+source /opt/psi/config/profile.bash
+export -n -f module
+module use unstable
+module add intel/16.3
+module add gcc/4.9.2
+module add openmpi/1.10.2
+
+# For informational purposes
+cat $PE_HOSTFILE | awk '{print $1" "$2}' > nodes.list
+
+mpiexec /afs/psi.ch/user/e/ehrlichman_m/bbin/dynap_raster ../../../common.in ../lat.lat
+

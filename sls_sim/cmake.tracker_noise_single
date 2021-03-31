@@ -1,0 +1,26 @@
+set (EXENAME tracker_noise_single)
+
+set (SRC_FILES
+  tracker_noise_single/tracker_noise_single.f90
+)
+
+set (LINK_LIBS
+  sls_sim
+  sls_lib
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  fgsl
+  gsl
+  gslcblas
+  forest
+  xrlf03
+  xrl
+  lapack95
+  lapack
+  blas
+  hdf5hl_fortran
+  hdf5_hl
+  hdf5_fortran
+  hdf5
+)

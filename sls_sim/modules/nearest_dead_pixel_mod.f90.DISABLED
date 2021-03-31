@@ -1,0 +1,317 @@
+module nearest_dead_pixel_mod
+use bmad
+
+implicit none
+
+type nearest_dead_pixel_param_struct
+  type (coord_struct)  :: co                ! coordinates about which the aperture is scanned
+  integer :: n_turn = 100                   ! Number of turns a particle must survive
+  integer :: n_adts = -1                    
+  real(rp) :: dr = 0.002
+  real(rp) :: ds = 0.01
+  real(rp) :: adts_x_max
+  real(rp) :: adts_x_min
+  real(rp) :: adts_y_max
+  real(rp) :: adts_y_min
+  real(rp) :: Sx, Sy
+end type
+
+type nearest_dead_pixel_struct
+  type(nearest_dead_pixel_param_struct) :: param                   ! parameters used for the scan            
+  real(rp) :: r
+end type
+
+contains
+
+!----------------------------------------------------------------------
+!-
+subroutine nearest_dead_pixel_scan(lat, dp_block, la_block, output_raster)
+
+  use bmad
+  use fgsl
+  use custom_dynamic_aperture_mod, only: custom_aperture_scan_struct
+  use sls_lib
+
+  implicit none
+
+  type (lat_struct) :: lat
+
+  real(rp) pxpos, pypos
+  real(rp) pxneg, pyneg
+  real(rp) arg1, arg2
+  real(rp) sn, cn, dn
+  real(rp) nu_x, nu_y
+  real(rp) x0, y0
+  real(rp) scale, dr, ds, s0
+  real(rp) objective_bonus
+
+  integer n, n_turn
+  integer status
+  integer track_state
+  integer count_alive, count_total
+  integer, optional :: output_raster
+  integer n_lin, lin_ixer_pos, lin_ixer_neg
+  integer i
+
+  logical dead
+
+  type (nearest_dead_pixel_struct) :: dp_block
+  type (custom_aperture_scan_struct) :: la_block
+  type (coord_struct) co, orb0
+
+  co = dp_block%param%co
+  ds = dp_block%param%ds
+  dr = dp_block%param%dr
+  n_turn = dp_block%param%n_turn
+  n_lin = size(la_block%aperture)
+
+  scale = 0.0d0
+  n = 0
+  do while(.true.)
+    objective_bonus = 0.0d0
+    dead = .false.
+    n = n + 1
+    scale = n * dr 
+
+    ! !FOO dump la
+    ! do i = 1, n_lin
+    !   write(876,'(2es14.5)') la_block%aperture(i)%x * scale, la_block%aperture(i)%y * scale
+    ! enddo !FOO
+    ! write(876,*) !FOO
+    ! write(876,*) !FOO
+
+    if( dp_block%param%n_adts .gt. 0 ) then
+      !check Qy along +y
+      orb0 = co
+      pypos = la_block%aperture((n_lin+1)/2)%y * scale
+      orb0%vec(3) = pypos
+      call tune_ele_by_ele(lat,orb0,n_turn,track_state,nu_x,nu_y)
+      if( nu_y .gt. dp_block%param%adts_y_max) track_state = 1
+      if( nu_y .lt. dp_block%param%adts_y_min) track_state = 1
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .ne. moving_forward$ ) exit
+
+      !check Qx and Qy along +x
+      orb0 = co
+      pxpos = la_block%aperture(2)%x * scale
+      pypos = la_block%aperture(2)%y * scale * 1.01
+      orb0%vec(1) = pxpos
+      orb0%vec(3) = pypos
+      call tune_ele_by_ele(lat,orb0,n_turn,track_state,nu_x,nu_y)
+      if( nu_x .gt. dp_block%param%adts_x_max) track_state = 1
+      if( nu_x .lt. dp_block%param%adts_x_min) track_state = 1
+      if( nu_y .gt. dp_block%param%adts_y_max) track_state = 1
+      if( nu_y .lt. dp_block%param%adts_y_min) track_state = 1
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .ne. moving_forward$ ) exit
+
+      !check Qx and Qy along -x
+      orb0 = co
+      pxneg = la_block%aperture(n_lin-1)%x * scale
+      pyneg = la_block%aperture(n_lin-1)%y * scale * 1.01
+      orb0%vec(1) = pxneg
+      orb0%vec(3) = pyneg
+      call tune_ele_by_ele(lat,orb0,n_turn,track_state,nu_x,nu_y)
+      if( nu_x .gt. dp_block%param%adts_x_max) track_state = 1
+      if( nu_x .lt. dp_block%param%adts_x_min) track_state = 1
+      if( nu_y .gt. dp_block%param%adts_y_max) track_state = 1
+      if( nu_y .lt. dp_block%param%adts_y_min) track_state = 1
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .ne. moving_forward$ ) exit
+    else
+      !check along +y
+      pypos = la_block%aperture((n_lin+1)/2)%y * scale
+      orb0%vec(3) = pypos 
+      call track_all_n_turns(lat,orb0,n_turn,track_state)
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .ne. moving_forward$ ) exit
+
+      orb0 = co
+      pxpos = la_block%aperture(2)%x * scale
+      pypos = la_block%aperture(2)%y * scale * 1.01
+      orb0%vec(1) = pxpos
+      orb0%vec(3) = pypos
+      call track_all_n_turns(lat,orb0,n_turn,track_state)
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .ne. moving_forward$ ) exit
+
+      !check along +x
+      orb0 = co
+      pxneg = la_block%aperture(n_lin-1)%x * scale
+      pyneg = la_block%aperture(n_lin-1)%y * scale * 1.01
+      orb0%vec(1) = pxneg
+      orb0%vec(3) = pyneg
+      call track_all_n_turns(lat,orb0,n_turn,track_state)
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .ne. moving_forward$ ) exit
+    endif
+
+    count_total=0
+    count_alive = 0
+    lin_ixer_pos = 1
+    lin_ixer_neg = -1
+    do while(.true.)
+      count_total = count_total + 2
+
+      orb0 = co
+      call interpolate_la(la_block, scale, ds, pxpos, pypos,  pxpos, pypos, lin_ixer_pos)
+      if(pxpos .lt. la_block%aperture((n_lin+2)/2)%x) exit
+      orb0%vec(1) = pxpos
+      orb0%vec(3) = pypos
+      call track_all_n_turns(lat,orb0,n_turn,track_state)
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .eq. moving_forward$ ) then
+        count_alive = count_alive + 1
+      else
+        dead = .true.
+      endif
+
+      orb0 = co
+      call interpolate_la(la_block, scale, ds, pxneg, pyneg, pxneg, pyneg, lin_ixer_neg)
+      orb0%vec(1) = pxneg
+      orb0%vec(3) = pyneg
+      call track_all_n_turns(lat,orb0,n_turn,track_state)
+      if(present(output_raster)) write(output_raster,'(3es14.5,i6)') orb0%vec(1), orb0%vec(3), orb0%vec(6), track_state
+
+      if( track_state .eq. moving_forward$ ) then
+        count_alive = count_alive + 1
+      else
+        dead = .true.
+      endif
+    enddo
+    objective_bonus = (1.0d0*count_alive) / (count_total+1.0d0)
+
+    if(track_state.ne.moving_forward$ .or. dead.eqv..true.) exit
+  enddo
+
+  dp_block%r = scale + dr*objective_bonus
+
+end subroutine nearest_dead_pixel_scan
+
+!+
+!-
+subroutine interpolate_la(la, scale, ds, xlast, ylast, xnext, ynext, ix)
+
+  use bmad
+  use custom_dynamic_aperture_mod, only: custom_aperture_scan_struct
+
+  implicit none
+  
+  type(custom_aperture_scan_struct) la
+  real(rp) scale
+  real(rp) ds, xlast, ylast, xnext, ynext
+  real(rp) xnext_a, xnext_b
+  real(rp) ynext_a, ynext_b
+  real(rp) dx, dy, dr2
+  real(rp) dotprod_a, dotprod_b
+  real(rp) x1, x2, y1, y2
+  real(rp) D !discriminant
+  real(rp) rootterm2, rootterm
+  integer nlin
+  integer ix
+  logical pta_between, ptb_between
+
+  nlin = size(la%aperture)
+
+  do while(.true.)
+    if( ix .gt. 0 ) then
+      !walk forwards (counter-clockwise)
+      x1 = la%aperture(ix)%x * scale
+      y1 = la%aperture(ix)%y * scale
+      x2 = la%aperture(ix+1)%x * scale
+      y2 = la%aperture(ix+1)%y * scale
+    else
+      !walk backwards (clockwise)
+      x1 = la%aperture(nlin+ix+1)%x * scale
+      y1 = la%aperture(nlin+ix+1)%y * scale
+      x2 = la%aperture(nlin+ix)%x * scale
+      y2 = la%aperture(nlin+ix)%y * scale
+    endif
+    dx = x2 - x1
+    dy = y2 - y1
+    dr2 = dx**2 + dy**2
+    D = (x1 - xlast)*(y2 - ylast) - (x2 - xlast)*(y1 - ylast)
+    rootterm2 = ds**2 * dr2 - D**2
+    if( rootterm2 .ge. 0 ) then
+      rootterm = sqrt(rootterm2)
+      xnext_a = xlast + ( D*dy + sign(1.0d0,dy) * dx * rootterm ) / dr2
+      ynext_a = ylast + ( -D*dx + abs(dy) * rootterm) / dr2
+      dotprod_a = dx*(xnext_a-x1) + dy*(ynext_a-y1)
+      pta_between = ( dotprod_a > 0 .and. dotprod_a .lt. dr2 )
+
+      xnext_b = xlast + ( D*dy - sign(1.0d0,dy) * dx * rootterm ) / dr2
+      ynext_b = ylast + ( -D*dx - abs(dy) * rootterm) / dr2
+      dotprod_b = dx*(xnext_b-x1) + dy*(ynext_b-y1)
+      ptb_between = ( dotprod_b > 0 .and. dotprod_b .lt. dr2 )
+      
+      if( ix .gt. 0 ) then
+        !walk forwards (counter-clockwise)
+        if( pta_between .and. xnext_a .lt. xlast) then
+          xnext = xnext_a
+          ynext = ynext_a
+          exit
+        elseif( ptb_between .and. xnext_b .lt. xlast) then
+          xnext = xnext_b
+          ynext = ynext_b
+          exit
+        endif
+      else
+        !walk backwards (clockwise)
+        if( pta_between .and. xnext_a .gt. xlast) then
+          xnext = xnext_a
+          ynext = ynext_a
+          exit
+        elseif( ptb_between .and. xnext_b .gt. xlast) then
+          xnext = xnext_b
+          ynext = ynext_b
+          exit
+        endif
+      endif
+    endif
+    if( ix .gt. 0 ) ix = ix + 1
+    if( ix .lt. 0 ) ix = ix - 1
+    if(abs(ix) .gt. nlin-1) then
+      !write(*,*) "Interpolation not found."
+      !stop
+    endif
+  enddo
+end subroutine
+
+!+
+!-
+subroutine track_all_n_turns(lat,orb0,n_turns,track_state)
+  use bmad
+
+  implicit none
+
+  type(lat_struct) lat
+  type(coord_struct) orb0
+  type(coord_struct), allocatable :: orb(:)
+  integer n_turns
+  integer track_state
+  integer m
+  
+  allocate(orb(0:lat%n_ele_track))
+  orb(0) = orb0
+
+  do m=1,n_turns
+    call track_all(lat,orb,track_state=track_state)
+    if(track_state == moving_forward$) then
+      orb(0)=orb(lat%n_ele_track)
+    else
+      exit
+    endif
+  enddo
+
+  deallocate(orb)
+
+end subroutine
+
+end module

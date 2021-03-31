@@ -1,0 +1,23 @@
+set (EXENAME orm)
+
+set (SRC_FILES
+  orm/orm.f90
+)
+
+set (LINK_LIBS
+  sls_sim
+  sls_lib
+  bmad
+  sim_utils
+  util_programs
+  recipes_f-90_LEPP
+  forest
+  fgsl
+  gsl
+  gslcblas
+  xrlf03
+  xrl
+	lapack95
+  lapack
+  blas
+)

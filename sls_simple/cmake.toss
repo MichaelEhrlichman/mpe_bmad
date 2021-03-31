@@ -1,0 +1,26 @@
+set (EXENAME toss)
+
+set (SRC_FILES
+  toss/toss.f90
+)
+
+set (LINK_LIBS
+  util_programs
+  sls_lib
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  forest
+  fgsl
+  gsl
+  gslcblas
+  xrlf03
+  xrl
+	lapack95
+  lapack
+  blas
+  hdf5hl_fortran
+  hdf5_hl
+  hdf5_fortran
+  hdf5
+)

@@ -1,0 +1,26 @@
+set (EXENAME beta_beat)
+
+set (SRC_FILES
+  beta_beat/beta_beat.f90
+)
+
+set (LINK_LIBS
+  sls_sim
+  sls_lib
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  forest
+  fgsl
+  gsl
+  gslcblas
+  xrlf03
+  xrl
+	lapack95
+  lapack
+  blas
+  hdf5hl_fortran
+  hdf5_hl
+  hdf5_fortran
+  hdf5
+)

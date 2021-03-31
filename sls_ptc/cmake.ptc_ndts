@@ -1,0 +1,22 @@
+set (EXENAME ptc_ndts)
+
+set (SRC_FILES
+  ptc_ndts/ptc_ndts.f90
+)
+
+set (LINK_LIBS
+  sls_sim
+  bmad
+  sim_utils
+#  cesr_utils
+  recipes_f-90_LEPP
+  fgsl
+  gsl
+  gslcblas
+  forest
+  xrlf03
+  xrl
+  lapack95
+  lapack
+  blas
+)

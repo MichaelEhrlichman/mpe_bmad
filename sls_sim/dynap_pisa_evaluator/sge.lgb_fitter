@@ -1,0 +1,19 @@
+#!/bin/bash
+#$ -cwd
+#$ -N lgb_fitter
+#$ -pe mpi_16 16
+#$ -q prime_bd.q
+#$ -l s_rt=20:00:00,h_rt=20:59:30
+#$ -m abe -M michael.ehrlichman@psi.ch
+
+source /opt/psi/config/profile.bash
+export -n -f module
+module use unstable
+module add intel/16.3
+module add psi-python34/2.1.0
+
+# For informational purposes
+cat $PE_HOSTFILE | awk '{print $1" "$2}' > nodes.list
+
+python lgb_lmfit.py
+

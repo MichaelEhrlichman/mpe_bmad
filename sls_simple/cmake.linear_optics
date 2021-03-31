@@ -1,0 +1,27 @@
+set (EXENAME linear_optics)
+
+set (SRC_FILES
+  linear_optics/linear_optics.f90
+#  ../../custom_KYMA/track1_preprocess.f90
+#  ../../custom_KYMA/track1_custom.f90
+)
+
+set (LINK_LIBS
+  sls_lib
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  fgsl
+  gsl
+  gslcblas
+  forest
+  xrlf03
+  xrl
+  lapack95
+  lapack
+  blas
+  hdf5hl_fortran
+  hdf5_hl
+  hdf5_fortran
+  hdf5
+)

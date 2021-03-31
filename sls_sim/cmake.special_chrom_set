@@ -1,0 +1,21 @@
+set (EXENAME special_chrom_set)
+
+set (SRC_FILES
+  special_chrom_set/special_chrom_set.f90
+)
+
+set (LINK_LIBS
+  bsim
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  forest
+  fgsl
+  gsl
+  gslcblas
+  xrlf03
+  xrl
+	lapack95
+  lapack
+  blas
+)

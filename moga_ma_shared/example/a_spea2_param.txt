@@ -1,0 +1,4 @@
+seed 8549
+tournament 2
+k_neighbor SQRT
+verbose YES

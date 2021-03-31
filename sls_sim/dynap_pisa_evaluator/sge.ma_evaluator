@@ -1,0 +1,20 @@
+#!/bin/bash
+#$ -cwd
+#$ -N ma_evaluator
+#$ -pe mpi_16 16
+#$ -q prime_bd.q,all.q
+#$ -l s_rt=10:00:00,h_rt=10:00:30
+
+source /opt/psi/config/profile.bash
+export -n -f module
+module use unstable
+module add gnuplot/4.6.3
+module add intel/16.2
+module add impi/5.1
+module add gcc/4.9.2
+
+export FOR_COARRAY_NUM_IMAGES=1
+
+/gpfs/home/ehrlichman_m/ebin/ma_evaluator.py
+
+

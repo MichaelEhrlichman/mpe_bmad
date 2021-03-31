@@ -1,0 +1,24 @@
+set (EXENAME off_optics)
+
+set (SRC_FILES
+  off_optics/off_optics.f90
+)
+
+set (LINK_LIBS
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  fgsl
+  gsl
+  gslcblas
+  forest
+  xrlf03
+  xrl
+  lapack95
+  lapack
+  blas
+  hdf5hl_fortran
+  hdf5_hl
+  hdf5_fortran
+  hdf5
+)

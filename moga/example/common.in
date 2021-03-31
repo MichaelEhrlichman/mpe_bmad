@@ -1,0 +1,63 @@
+ &general
+    lat_file = 'ARv4.bmad'
+    use_hybrid = .true.   ! concatenate linear elements (faster tracking)
+ /
+ &da
+    tracking_method = 1  ! 1 = bmad_standard$
+    n_turn   = 200   ! number of turns for DA calculation
+    n_adts   = 200   ! number of turns over which to average ADTS
+    n_angle = 7   ! number of angles for DA
+    dE(1) = 0.0   ! on-energy objective
+    dE(2) = -0.03  ! negative dE objective
+    dE(3) =  0.03  ! positive dE objective
+    track_dims = 4  ! 4D tracking
+    init_len = 0.002  ! initial length for DA binary search
+    adts_x_min = 16.0  ! particles whose amplitude dependent tune exceeds these bounds are treated as lost.
+    adts_x_max = 17.0
+    adts_y_min = 8.0
+    adts_y_max = 9.0
+ /
+ &nl_moga
+    generate_feasible_seeds_only = -1   ! If positive number, do not calculate objectives.  Only calculate constraints and terminate program
+                                        ! this nubmer of constraint-satisfying seeds have been generated.  -1 to disable
+    moga_output_file = 'moga_results.out'
+    initial_pop = 'random'  ! 'random' to start with random initial population.  'file name' to seed from a file.
+    seed = 30901 ! seed random number generator
+    max_gen = 900  ! force termination after this many generations
+
+    set_chrom_x = 1.0  ! set chromaticity to this value.
+    set_chrom_y = 1.0
+
+    emittance_target = 1.8e-9
+
+    !breeder parameters
+    breeder_params%cross_p = 0.8   ! cross over probability
+    breeder_params%mutate_p = 0.20  ! mutation probability.  1/<number of variables> is a good choice.
+    breeder_params%eta = 0.8  ! width for cross over distribution
+
+    !constraints
+    linear_vec_cutoff = 0.0010  !if the off-momentum linear aperture shrinks below this value, then perfectly bad objective is returned.
+    co_limit = 0.0020  ! nonlinear dispersion global orbit dominance constraint.
+    fp_dE_neg = -0.05  ! bound for chromatic footprint constraint
+    fp_dE_pos = 0.05
+    n_fp_steps = 31  ! granularity of chromatic footprint calculation
+    x_fp_min = 16.0  ! bounds for horizontal and vertical trace
+    x_fp_max = 17.0
+    y_fp_min = 8.0
+    y_fp_max = 9.0
+    work_pt_x_min = 16.10
+    work_pt_x_max = 16.45
+    work_pt_y_min = 8.10
+    work_pt_y_max = 8.45
+
+    !variables.
+    !              name       property   l cons     u cons    l init    u init    mutate width
+    mags_in(1)   = 'qf',      'k1',          0.0,      4.0,      -1.0,     5.0,     0.3
+    mags_in(2)   = 'qd',      'k1',         -4.0,      0.0,      -5.0,     1.0,     0.3
+    mags_in(3)   = 'qfa',     'k1',          0.0,      4.0,      -1.0,     5.0,     0.4
+    mags_in(4)   = 'shf',     'k2',      -1000.0,   1000.0,   -1000.0,  1000.0,   300.0
+    mags_in(5)   = 'shd',     'k2',      -1000.0,   1000.0,   -1000.0,  1000.0,   300.0
+
+    chrom_mags(1)   = 'sf',      'k2',      -1000.0,   1000.0,   0.0,  0.0,   0.0
+    chrom_mags(2)   = 'sd',      'k2',      -1000.0,   1000.0,   0.0,  0.0,   0.0
+ /

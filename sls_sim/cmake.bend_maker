@@ -1,0 +1,22 @@
+set (EXENAME bend_maker)
+
+set (SRC_FILES
+  bend_maker/bend_maker.f90
+)
+
+set (LINK_LIBS
+  sls_sim
+  sls_lib
+  bmad
+  sim_utils
+  recipes_f-90_LEPP
+  fgsl
+  gsl
+  gslcblas
+  forest
+  xrlf03
+  xrl
+  lapack95
+  lapack
+  blas
+)
