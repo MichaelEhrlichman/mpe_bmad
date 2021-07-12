@@ -26,7 +26,7 @@ real(rp) cor_chrom_x, cor_chrom_y
 real(rp) s, delta_s
 real(rp) oor
 real(rp) total_bend_angle
-real(rp) emitx, sigpop
+real(rp) emitx, emity, sigpop
 
 bp_com%always_parse = .true.
 bmad_com%radiation_damping_on = .false.
@@ -77,8 +77,9 @@ close(45)
 ! Twiss by ele
 !
 
-emitx = 0.0 !3.6e-9
-sigpop = 0.0 !4.1e-4
+emitx = 70.0e-12
+emity = 70.0e-12
+sigpop = 9.4e-4
 
 open(45,file='twiss.out')
 
@@ -125,13 +126,13 @@ do while (s .lt. lat%param%total_length)
   write(65,'(i11,f11.5,6es14.4)') i, s, orb_at_s%vec(1:6)
   Ha = ( (ele_at_s%a%eta**2) + ( ele_at_s%a%beta*ele_at_s%a%etap + ele_at_s%a%alpha*ele_at_s%a%eta )**2)/ele_at_s%a%beta
   Hb = ( (ele_at_s%b%eta**2) + ( ele_at_s%b%beta*ele_at_s%b%etap + ele_at_s%b%alpha*ele_at_s%b%eta )**2)/ele_at_s%b%beta
-  write(55,'(i11,2f11.3,18es14.4,"   ",a20,es14.4)') element_at_s(lat,s,.true.), &
+  write(55,'(i11,2f11.3,18es14.4,"   ",a20,2es14.4)') element_at_s(lat,s,.true.), &
         ele_at_s%s, delta_s, &
         ele_at_s%a%beta, ele_at_s%a%alpha, ele_at_s%a%gamma, ele_at_s%a%eta, ele_at_s%a%etap, Ha, &
         ele_at_s%x%eta, ele_at_s%x%etap, ele_at_s%a%phi, &
         ele_at_s%b%beta, ele_at_s%b%alpha, ele_at_s%b%gamma, ele_at_s%b%eta, ele_at_s%b%etap, Hb, &
         ele_at_s%y%eta, ele_at_s%y%etap, ele_at_s%b%phi, &
-        ele_at_s%name, sqrt(emitx*ele_at_s%a%beta + sigpop**2 * ele_at_s%a%eta**2)
+        ele_at_s%name, sqrt(emitx*ele_at_s%a%beta + sigpop**2 * ele_at_s%a%eta**2), sqrt(emity*ele_at_s%b%beta)
   s = s + delta_s
   i = i + 1
 enddo
