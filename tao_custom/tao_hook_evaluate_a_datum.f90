@@ -70,7 +70,7 @@ found = .false.
 datum_value = 0
 dump_dist = .true.
 saved_ele = 157  !ap_start
-loud = .false.
+loud = .true.
 
 if(trim(datum%data_type) == 'survival') then
   if(datum%good_user) then

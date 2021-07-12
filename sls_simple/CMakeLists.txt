@@ -9,7 +9,7 @@ set (EXE_SPECS
 # cmake.make_hybrid_lat
 # #cmake.show_field
 # cmake.toss
-# cmake.toss_many
+ cmake.toss_many
 # cmake.toss_mc
 # #cmake.toss_envelope
 cmake.tunes

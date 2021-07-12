@@ -15,7 +15,7 @@ integer, parameter :: grid_ny = 200
 integer, parameter :: nsigx = 3
 integer, parameter :: nPx = 400
 
-#define SIGM_RING
+#define ORDINARY
 
 !integer, parameter :: Nmc = 3000
 #ifdef SIGM_RING
@@ -25,6 +25,13 @@ character(9), parameter :: dist_type = 'sigm_ring'
 #ifdef GRID_GRID
 integer, parameter :: Nmc = grid_nx*grid_nx
 character(9), parameter :: dist_type = 'grid_grid'
+#endif
+#ifdef ORDINARY
+integer, parameter :: Nmc = 9000
+character(9), parameter :: dist_type = 'flat_wted'
+!dist_type = 'true_gaus'
+!dist_type = 'flat_wted'
+!dist_type = 'flat_flat'
 #endif
 
 real(rp) x(Nmc), y(Nmc), z(Nmc)
@@ -47,10 +54,6 @@ bmad_com%radiation_damping_on = .false.
 bmad_com%radiation_fluctuations_on = .false.
 
 ix = 0
-
-!dist_type = 'true_gaus'
-!dist_type = 'flat_wted'
-!dist_type = 'flat_flat'
 
 initial_offset = 0.0d0
 
@@ -87,21 +90,21 @@ grid_y_max = 0.002  !0.0040
 !  long_gamma = 0.08
 
 !Unit
-! betax  = 1.0
-! alphax = 0.0
-! betay  = 1.0
-! alphay = 0.0
-! etax   = 0.0
-! etaxp  =  0.0 
-! etay   =  0.0
-! etayp  =  0.0
-! emit_x = 300.0d-9  !ALS-U CDR Booster emittance
-! emit_y = 30.0d-9
-! emit_z = 2.500e-5 !1.0e-3 * 25 mm
-! long_beta = 12.5
-! long_gamma = 0.08
+!betax  = 1.0
+!alphax = 0.0
+!betay  = 1.0
+!alphay = 0.0
+!etax   = 0.0
+!etaxp  =  0.0 
+!etay   =  0.0
+!etayp  =  0.0
+!emit_x = 300.0d-9  !ALS-U CDR Booster emittance
+!emit_y = 30.0d-9
+!emit_z = 2.500e-5 !1.0e-3 * 25 mm
+!long_beta = 12.5
+!long_gamma = 0.08
 
-!AR Equilibrium at element zero
+!!AR Equilibrium at element zero
 betax  = 14.53867132
 alphax = 0.0
 betay  = 4.86263882
@@ -116,9 +119,9 @@ emit_z = 4.367e-6
 long_beta = 6.0
 long_gamma = 0.167
 
-Nx = 9 
-Ny = 9
-Nz = 9
+Nx = 16 
+Ny = 16
+Nz = 16
 
 !Produce monte carlo distributions
 call random_seed()
