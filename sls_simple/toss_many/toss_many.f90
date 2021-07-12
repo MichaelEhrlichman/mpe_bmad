@@ -9,10 +9,10 @@ program toss_many
   type(coord_struct) orb1
 
   integer i,j,k
-  integer ios, npart
+  integer ios, npart, direction
   integer ele_in, ele_out
 
-  real(rp) vec_offset(6)
+  real(rp) offset(6)
   real(rp) s, delta_s
   real(rp), allocatable :: part_in(:,:), part_out(:,:)
 
@@ -22,9 +22,11 @@ program toss_many
   character*100 part_file
   character*100 out_file
   
-  namelist /toss_many_params/ lat_file, part_file, ele_in, ele_out
+  namelist /toss_many_params/ lat_file, part_file, ele_in, ele_out, offset, direction
 
   bp_com%always_parse = .true.
+  direction = 0
+  offset = 0.0d0
 
   call getarg(1,param_file)
   open(10,file=param_file)
@@ -56,9 +58,9 @@ program toss_many
 
   open(65,file=out_file)
   do i=1,npart
-    !call init_coord(traj(ele_in),part_in(i,:),lat%ele(ele_in),element_end=upstream_end$)
-    traj(ele_in)%vec = part_in(i,:)
-    call track_many(lat, traj, ele_in, ele_out,1)
+    call init_coord(traj(ele_in),part_in(i,:)+offset,lat%ele(ele_in),element_end=upstream_end$)
+    !traj(ele_in)%vec = part_in(i,:) + offset
+    call track_many(lat, traj, ele_in, ele_out,direction)
     write(65,'(6es12.3)') traj(ele_out)%vec(:)
   enddo
   close(65)
