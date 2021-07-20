@@ -11,6 +11,7 @@ program aperture_and_lifetime
   type (coord_struct), allocatable :: co(:)
   type (normal_modes_struct) mode
   type (momentum_aperture_struct), allocatable :: max_deltam(:)
+  type (ele_pointer_struct), allocatable :: eles(:)
 
   character(5) mpi_mode
   integer i,j
@@ -61,6 +62,7 @@ program aperture_and_lifetime
   integer n_ma_locs
   integer periodicity
   character(100) lat_file
+  character(100) mask
   logical use_hybrid
   real(rp) MV_BL_rfvoltage
   type(ele_pointer_struct), allocatable :: rfcav_eles(:)
@@ -229,6 +231,12 @@ program aperture_and_lifetime
     allocate(max_deltam(n_ma_locs))
     do i=1,n_ma_locs
       max_deltam(i)%s=ring%ele(given_ma_locs(i))%s
+    enddo
+  elseif( trim(stepping) == 'mask' ) then
+    call lat_ele_locator (mask, ring, eles, n_ma_locs, err)
+    allocate(max_deltam(n_ma_locs))
+    do i=1,n_ma_locs
+      max_deltam(i)%s=eles(i)%ele%s
     enddo
   elseif( trim(stepping) == 'range_ix' ) then
     n_ma_locs = given_ma_range(2)-given_ma_range(1)+1

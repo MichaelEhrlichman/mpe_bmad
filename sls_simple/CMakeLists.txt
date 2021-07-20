@@ -33,7 +33,7 @@ cmake.co
  cmake.off_optics
  cmake.element_list
  cmake.extended_names
-#cmake.phys_apertures
+cmake.phys_apertures
 # cmake.make_opa_eles
 # cmake.grid
 # cmake.one_turn_mat
