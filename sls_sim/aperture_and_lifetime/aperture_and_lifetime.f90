@@ -242,7 +242,7 @@ program aperture_and_lifetime
     n_ma_locs = given_ma_range(2)-given_ma_range(1)+1
     allocate(max_deltam(n_ma_locs))
     max_deltam(1:n_ma_locs)%s=ring%ele(given_ma_range(1):given_ma_range(2))%s
-    max_deltam(1:n_ma_locs)%s=max(max_deltam(1:n_ma_loca)%s,0.0001)
+    max_deltam(1:n_ma_locs)%s=max(max_deltam(1:n_ma_locs)%s,0.0001)
   elseif( trim(stepping) == 'by_ix' ) then
     high_water = 0.0 !needed to deal with negative length elements
     n_ma_locs = 0
