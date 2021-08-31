@@ -1,0 +1,47 @@
+program bayes
+
+implicit none
+
+real, parameter :: pi = 3.141592653
+
+integer, parameter :: ndata = 4
+real meas(ndata)
+
+meas = take_meas(ndata)
+
+write(*,*) meas
+
+contains
+
+function take_meas(ndata)
+  real, parameter :: a = 5.0
+  real, parameter :: s = 4.0
+
+  integer ndata
+  real take_meas(ndata)
+  
+  real n1, n2
+  integer i
+
+  take_meas = 0
+
+  do i=1,ndata,2
+    call box_muller(n1,n2)
+    take_meas(i) = a + s*n1
+    take_meas(i+1) = a + s*n2
+  enddo
+end function
+
+subroutine box_muller(x1,x2)
+  real x1, x2
+  real u1, u2
+
+  call random_seed()
+  call random_number(u1)
+  call random_number(u2)
+
+  x1 = sqrt(-2.0d0*log(u1))*cos(2.0d0*pi*u2)
+  x2 = sqrt(-2.0d0*log(u1))*sin(2.0d0*pi*u2)
+end subroutine
+
+end program

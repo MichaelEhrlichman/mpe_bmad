@@ -1,0 +1,14 @@
+SET (EXENAME bayes)
+
+set (SRC_FILES "bayes_4.f90")
+
+SET (LINK_FLAGS ${READLINE_LINK_FLAGS})
+
+SET (LINK_LIBS
+  tao 
+  bmad
+  sim_utils
+  ${PLOT_LINK_LIBS}
+  ${ACC_BMAD_LINK_LIBS}
+)
+
