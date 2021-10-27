@@ -6,6 +6,8 @@ set (SRC_DIRS
 
 set (EXE_SPECS
   cmake.ps_tune_perturb
+  cmake.amp_fact_Q
+  cmake.amp_fact_B_to_Q_via_K2
 # cmake.make_hybrid_lat
 # #cmake.show_field
 # cmake.toss
@@ -32,7 +34,7 @@ cmake.co
 # cmake.linear_ma
  cmake.off_optics
  cmake.element_list
- cmake.extended_names
+ # cmake.extended_names
 cmake.phys_apertures
 # cmake.make_opa_eles
 # cmake.grid
