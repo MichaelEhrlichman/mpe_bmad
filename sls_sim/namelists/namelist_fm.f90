@@ -1,8 +1,5 @@
 module namelist_fm
 
-! provides:
-! dE, xmax, ymax, n_turns, fft_turns, nx, ny
-
 use precision_def
 
 implicit none

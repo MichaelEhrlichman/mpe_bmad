@@ -1,6 +1,12 @@
 set (EXENAME amp_fact_B_to_Q_via_K2)
 
 set (SRC_FILES
+  #amp_fact_B_to_Q_via_K2/derp_mod.f90
+  #amp_fact_B_to_Q_via_K2/derp2_mod.f90
+  #amp_fact_B_to_Q_via_K2/derp3_mod.f90
+  #amp_fact_B_to_Q_via_K2/derp4_mod.f90
+  #amp_fact_B_to_Q_via_K2/derp5_mod.f90
+  #amp_fact_B_to_Q_via_K2/derp6_mod.f90
   amp_fact_B_to_Q_via_K2/amp_fact_B_to_Q_via_K2.f90
 )
 

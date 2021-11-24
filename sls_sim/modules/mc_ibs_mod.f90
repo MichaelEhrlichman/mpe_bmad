@@ -56,7 +56,7 @@ END SUBROUTINE make_grid
 !-
 SUBROUTINE bin_dist(dist,nx,ny,nz,cell_volume,particle_to_cell,cell_to_particles)
 
-USE eigen_mod
+!USE eigen_mod
 
 TYPE(grid_struct) grid
 INTEGER nx, ny, nz
@@ -252,7 +252,7 @@ END SUBROUTINE make_sigma_mat
 !-
 SUBROUTINE normal_sigma_mat(sigma_mat,normal)
   USE bmad
-  USE eigen_mod
+  !USE eigen_mod
   
   IMPLICIT none
 

@@ -117,7 +117,7 @@ program orm
     allocate(A(n_bpms,n_h_correctors))
     allocate(Ap(n_h_correctors,n_bpms))
     call analytic_orm(ring,I1,'x',A,bpms,h_correctors)
-    call make_pseudoinverse(A,Ap)
+    call mat_pseudoinverse(A,Ap)
     !Make correction vector
     tx = -matmul(Ap,dx)
     !Apply correction vector
@@ -131,7 +131,7 @@ program orm
     allocate(A(n_bpms,n_v_correctors))
     allocate(Ap(n_v_correctors,n_bpms))
     call analytic_orm(ring,I1,'y',A,bpms,v_correctors)
-    call make_pseudoinverse(A,Ap)
+    call mat_pseudoinverse(A,Ap)
     !Make correction vector
     ty = -matmul(Ap,dy)
     !Apply correction vector

@@ -8,6 +8,7 @@ set (EXE_SPECS
   cmake.ps_tune_perturb
   cmake.amp_fact_Q
   cmake.amp_fact_B_to_Q_via_K2
+  cmake.amp_fact_PS_at_K2
 # cmake.make_hybrid_lat
 # #cmake.show_field
 # cmake.toss

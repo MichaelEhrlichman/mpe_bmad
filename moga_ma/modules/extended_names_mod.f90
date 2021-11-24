@@ -21,16 +21,16 @@ character(6) str
 integer i, j
 integer ixa
 
-curstr = lat%nametable%name(lat%nametable%indexx(lat%nametable%n_min))
+curstr = lat%nametable%name(lat%nametable%index(lat%nametable%n_min))
 ixa = 0
 allocate(nt2(lat%nametable%n_min:lat%nametable%n_max))
 allocate(more_than_one(lat%nametable%n_min:lat%nametable%n_max))
 more_than_one = .false.
 
 do i=lat%nametable%n_min+1,lat%nametable%n_max
-  if(trim(lat%nametable%name(lat%nametable%indexx(i))) .ne. trim(curstr)) then
-    curstr = lat%nametable%name(lat%nametable%indexx(i))
-    nt2(ixa:i-1) = lat%nametable%indexx(ixa:i-1)
+  if(trim(lat%nametable%name(lat%nametable%index(i))) .ne. trim(curstr)) then
+    curstr = lat%nametable%name(lat%nametable%index(i))
+    nt2(ixa:i-1) = lat%nametable%index(ixa:i-1)
     call shell_sort_i(nt2(ixa:i-1))
     if ( ixa .lt. i-1 ) then
       more_than_one(ixa:i-1) = .true. 
@@ -38,7 +38,7 @@ do i=lat%nametable%n_min+1,lat%nametable%n_max
     ixa = i
   endif
 enddo
-nt2(ixa:lat%nametable%n_max) = lat%nametable%indexx(ixa:lat%nametable%n_max)
+nt2(ixa:lat%nametable%n_max) = lat%nametable%index(ixa:lat%nametable%n_max)
 call shell_sort_i(nt2(ixa:lat%nametable%n_max))
 if ( ixa .lt. lat%nametable%n_max ) then
   more_than_one(ixa:lat%nametable%n_max) = .true. 

@@ -41,7 +41,7 @@ set (EXE_SPECS
  #cmake.prm
  cmake.ma_lat
  cmake.beta_beat
- #out of date. cmake.freq_map
+ # cmake.freq_map
 )
 
 #set (FFLAGS "-pg")     # For profiling
