@@ -58,8 +58,8 @@ program ps_tune_perturb
     max_pz = 0.0d0
     do j=1,n_eles
       ! Random Distribution
-      !FOO call ran_uniform(rnum)
-      rnum = 0
+      call ran_uniform(rnum)
+      !rnum = 0
       write(set_str,'(a,es14.5)') 'PS_PHASE=',rnum*twopi
 
       ! Super Bad K1 Distribution
