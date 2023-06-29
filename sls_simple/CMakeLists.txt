@@ -34,7 +34,7 @@ set (EXE_SPECS
 # cmake.mode3_optics
 # cmake.linear_ma
 cmake.off_optics
-# cmake.element_list
+cmake.element_list
  # cmake.extended_names
 cmake.phys_apertures
 # cmake.make_opa_eles
