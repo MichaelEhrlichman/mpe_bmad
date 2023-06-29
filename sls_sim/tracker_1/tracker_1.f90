@@ -94,7 +94,7 @@ program tracker_1
   write(*,'(a,6es14.5)') "Initial Vector: co(ix_inj) + init_vec = ", orbit(ix_inj)%vec
 
   tbt_coords(1)%vec(:) = orbit(ix_inj)%vec(:)
-  do i = 2, n_turns-1
+  do i = 2, n_turns
     call track_many(lat, orbit, ix_inj, ix_inj, 1, track_state=track_state)
     if(track_state /= moving_forward$) then
       write(*,*) "Particle lost.  turn, track_state: ", i,  track_state

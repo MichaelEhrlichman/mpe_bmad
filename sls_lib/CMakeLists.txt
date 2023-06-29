@@ -3,7 +3,7 @@ project(sls_lib)
 
 set(LIBNAME sls_lib)
 
-set(CREATE_SHARED true)
+set(CREATE_SHARED false)
 
 set(SRC_DIRS
   code

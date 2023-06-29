@@ -5,36 +5,36 @@ set (SRC_DIRS
 )
 
 set (EXE_SPECS
-  cmake.ps_tune_perturb
-  cmake.amp_fact_Q
-  cmake.amp_fact_B_to_Q_via_K2
-  cmake.amp_fact_PS_at_K2
+#  cmake.ps_tune_perturb
+#  cmake.amp_fact_Q
+#  cmake.amp_fact_B_to_Q_via_K2
+#  cmake.amp_fact_PS_at_K2
 # cmake.make_hybrid_lat
 # #cmake.show_field
-# cmake.toss
- cmake.toss_many
+ cmake.toss
+# cmake.toss_many
 # cmake.toss_mc
 # #cmake.toss_envelope
-cmake.tunes
-cmake.basic_stats
+#cmake.tunes
+#cmake.basic_stats
 # cmake.make_2fam
 # cmake.crm_frontend
- cmake.analytic_h
- cmake.amp_fact
- cmake.amp_fact2
+# cmake.analytic_h
+# cmake.amp_fact
+# cmake.amp_fact2
 # cmake.srdt_lsq_soln  #now in bsim
 # cmake.ptc_via_bmad
 # cmake.smat_sizes
-cmake.co
+#cmake.co
 # cmake.phase_space
- cmake.rad_int
- cmake.for_dcs
+# cmake.rad_int
+# cmake.for_dcs
  cmake.linear_optics
 # cmake.phase_beating
- cmake.mode3_optics
+# cmake.mode3_optics
 # cmake.linear_ma
- cmake.off_optics
- cmake.element_list
+cmake.off_optics
+# cmake.element_list
  # cmake.extended_names
 cmake.phys_apertures
 # cmake.make_opa_eles

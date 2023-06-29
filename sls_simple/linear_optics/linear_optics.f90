@@ -57,7 +57,7 @@ call twiss_and_track(lat,orb,status)
 
 ! call chrom_calc(lat,0.0D-6,cor_chrom_x,cor_chrom_y)
  
- call calc_z_tune(lat)
+ call calc_z_tune(lat%branch(0))
 
 ! total_bend_angle = 0.0d0
 ! do i=1,lat%n_ele_track

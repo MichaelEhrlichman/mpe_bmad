@@ -14,33 +14,33 @@ set (SRC_DIRS
 set (EXE_SPECS
  #cmake.bend_maker
  #cmake.injection
- cmake.inj_dist_tao
+# cmake.inj_dist_tao
 # cmake.tracker_train
 # cmake.special_chrom_set
  #cmake.write_quads
- cmake.dynap_slim
- cmake.dynap_linear
- cmake.dynap_raster
+# cmake.dynap_slim
+# cmake.dynap_linear
+# cmake.dynap_raster
  #cmake.aperture_and_lifetime
  #cmake.divergence_aperture
  #cmake.scan_dp
  #cmake.patch_maker
- cmake.tracker_adts
- cmake.footprint
+# cmake.tracker_adts
+# cmake.footprint
  #cmake.footprint_simple
  #cmake.tracker_footprint
- cmake.dynap_pz
- cmake.tracker_1
+# cmake.dynap_pz
+cmake.tracker_1
  #fix ele_noise_struct_in cmake.tracker_noise_multi
- cmake.tracker_noise_single
- cmake.portrait
- cmake.tracker_simple
- cmake.tracker_dist
- cmake.orm
+# cmake.tracker_noise_single
+# cmake.portrait
+# cmake.tracker_simple
+# cmake.tracker_dist
+# cmake.orm
 # cmake.orm_print
  #cmake.prm
- cmake.ma_lat
- cmake.beta_beat
+# cmake.ma_lat
+# cmake.beta_beat
  # cmake.freq_map
 )
 

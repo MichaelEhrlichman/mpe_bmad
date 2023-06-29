@@ -9,7 +9,7 @@ program toss
   type(coord_struct) orb1
 
   integer i,j,k
-  integer, parameter :: nsteps=200
+  integer, parameter :: nsteps=2000
 
   real(rp) vec_offset(6)
   real(rp) s, delta_s
@@ -23,17 +23,17 @@ program toss
 
   allocate(orb(0:lat%n_ele_track))
 
-  vec_offset = (/ 0.0000, 0.0, 0.0000, 0.0, 0.0, 0.0 /)
+  vec_offset = (/ 0.0000, 0.0, 0.0000, 0.0, 0.0, 0.015 /)
 
   open(20,file='toss.dat')
   orb(0)%vec = vec_offset
-  !call init_coord(orb1,vec_offset,lat%ele(0),element_end=upstream_end$)
+  call init_coord(orb1,vec_offset,lat%ele(0),element_end=upstream_end$)
   call track_all(lat,orb)
   do i=0,lat%n_ele_track
     write(20,'(i8,f14.6,6es15.6,a,a)') i, lat%ele(i)%s, orb(i)%vec, "   ", lat%ele(i)%name
   enddo
 
-  !call init_coord(orb1,vec_offset,lat%ele(0),element_end=upstream_end$)
+  call init_coord(orb1,vec_offset,lat%ele(0),element_end=upstream_end$)
   orb1%vec = vec_offset
   s = 0.0d0
   delta_s = lat%param%total_length/nsteps
