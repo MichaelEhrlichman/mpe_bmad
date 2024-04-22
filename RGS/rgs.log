@@ -1,0 +1,187 @@
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2009.12.7)  1 FEB 2010 13:50
+entering extended mode
+**C:/Users/Michael/Desktop/RGS/rgs.tex
+(C:/Users/Michael/Desktop/RGS/rgs.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman, ngerman, german-x-2009-06-19, ngerman-x-2009-06-19, french, loaded.
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\base\article.cls"
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\base\size10.clo"
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\graphics\graphics.sty"
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\ltxmisc\ulem.sty"
+\UL@box=\box26
+\UL@hyphenbox=\box27
+\UL@skip=\skip43
+\UL@hook=\toks15
+\UL@pe=\count88
+\UL@pixel=\dimen105
+\ULC@box=\box28
+Package: ulem 2000/05/26
+\ULdepth=\dimen106
+)
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\ltxmisc\anysize.sty"
+Package: anysize 1994/08/13 1.0 Contributed LaTeX2e package
+
+Package: `anysize' 1.0 <1994/08/13>
+\@Leftmargin=\dimen107
+\@Rightmargin=\dimen108
+\@Topmargin=\dimen109
+\@Bottommargin=\dimen110
+) ("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\subfigure\subfigure.sty"
+Package: subfigure 2002/07/30 v2.1.4 subfigure package
+\subfigtopskip=\skip44
+\subfigcapskip=\skip45
+\subfigcaptopadj=\dimen111
+\subfigbottomskip=\skip46
+\subfigcapmargin=\dimen112
+\subfiglabelskip=\skip47
+\c@subfigure=\count89
+\c@lofdepth=\count90
+\c@subtable=\count91
+\c@lotdepth=\count92
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\subfigure\subfigure.cfg")
+\subfig@top=\skip48
+\subfig@bottom=\skip49
+)
+(C:\Users\Michael\Desktop\RGS\rgs.aux
+
+LaTeX Warning: Label `gen' multiply defined.
+
+)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+ ("C:\Program Files (x86)\MiKTeX 2.8\tex\context\base\supp-pdf.tex"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count93
+\scratchdimen=\dimen113
+\scratchbox=\box29
+\nofMPsegments=\count94
+\nofMParguments=\count95
+\everyMPshowfont=\toks16
+\MPscratchCnt=\count96
+\MPscratchDim=\dimen114
+\MPnumerator=\count97
+\everyMPtoPDFconversion=\toks17
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 38.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 38.
+ [1
+
+{C:/Users/Michael/AppData/Local/MiKTeX/2.8/pdftex/config/pdftex.map}]
+<simple_scattering.png, id=14, 123.46124pt x 93.34875pt>
+File: simple_scattering.png Graphic file (type png)
+
+<use simple_scattering.png> [2 <C:/Users/Michael/Desktop/RGS/simple_scattering.
+png (PNG copy)>]
+Overfull \hbox (14.00044pt too wide) in paragraph at lines 188--189
+\OT1/cmr/m/n/10 Two sim-u-la-tions are pro-duced. One gen-er-ates and tracks pa
+r-ti-cles pro-duced by Coulomb scat-ter-ing, the other by Bremsstrahlung.
+ []
+
+[3] <gen-coul.png, id=22, 643.40375pt x 451.6875pt>
+File: gen-coul.png Graphic file (type png)
+ <use gen-coul.png>
+<gen-brem.png, id=23, 641.39626pt x 451.6875pt>
+File: gen-brem.png Graphic file (type png)
+ <use gen-brem.png>
+<lost-coul.png, id=24, 642.4pt x 452.69125pt>
+File: lost-coul.png Graphic file (type png)
+ <use lost-coul.png>
+<lost-brem.png, id=25, 642.4pt x 452.69125pt>
+File: lost-brem.png Graphic file (type png)
+ <use lost-brem.png>
+<coll_dist.png, id=26, 726.715pt x 559.08875pt>
+File: coll_dist.png Graphic file (type png)
+ <use coll_dist.png>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[4 <C:/Users/Michael/Desktop/RGS/gen-coul.png (PNG copy)> <C:/Users/Michael/Des
+ktop/RGS/gen-brem.png (PNG copy)> <C:/Users/Michael/Desktop/RGS/lost-coul.png (
+PNG copy)> <C:/Users/Michael/Desktop/RGS/lost-brem.png (PNG copy)>] [5 <C:/User
+s/Michael/Desktop/RGS/coll_dist.png (PNG copy)>]
+(C:\Users\Michael\Desktop\RGS\rgs.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 1191 strings out of 495285
+ 15370 string characters out of 3179872
+ 70355 words of memory out of 3000000
+ 4427 multiletter control sequences out of 15000+200000
+ 5255 words of font info for 20 fonts, out of 3000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 25i,10n,24p,645b,236s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+<C:/Program Files (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmex10.pfb><C
+:/Program Files (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/
+Program Files (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Pro
+gram Files (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program F
+iles (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program File
+s (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x
+86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/
+MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/Mi
+KTeX 2.8/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on rgs.pdf (5 pages, 407072 bytes).
+PDF statistics:
+ 68 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+
