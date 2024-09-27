@@ -1,6 +1,7 @@
-set (EXENAME tracker_simple)
+set (EXENAME toss_alphap)
+
 set (SRC_FILES
-  tracker_simple/tracker_simple.f90
+  toss_alphap/toss_alphap.f90
 )
 
 set (LINK_LIBS

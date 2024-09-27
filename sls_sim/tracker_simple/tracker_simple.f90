@@ -17,8 +17,8 @@ program tracker_simple_program
   call bmad_parser(lat_file, lat)
 
   call set_on_off(rfcavity$, lat, on$)
-  bmad_com%radiation_damping_on = .true.
-  bmad_com%radiation_fluctuations_on = .true.
+  bmad_com%radiation_damping_on = .false.
+  bmad_com%radiation_fluctuations_on = .false.
 
   call twiss_and_track(lat,co,status)
 
@@ -27,7 +27,7 @@ program tracker_simple_program
   open(100,file='tracker_simple.dat')
   write(100,'(a6,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
 
-  orbit(0)%vec = co(0)%vec
+  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.017d0 /)
   write(*,'(a,6es14.5)') "Initial Vector: ", orbit(0)%vec
 
   do i = 1, n_turns
@@ -37,6 +37,7 @@ program tracker_simple_program
       write(*,*) "Particle lost at turn ", i
       exit
     endif
+    orbit(0) = orbit(lat%n_ele_track)
   enddo
 
   close(100)

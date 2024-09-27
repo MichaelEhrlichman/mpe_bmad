@@ -1,6 +1,7 @@
-set (EXENAME tracker_simple)
+set (EXENAME long_phase_space)
+
 set (SRC_FILES
-  tracker_simple/tracker_simple.f90
+  long_phase_space/long_phase_space.f90
 )
 
 set (LINK_LIBS

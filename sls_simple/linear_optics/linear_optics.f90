@@ -60,12 +60,12 @@ call twiss_and_track(lat,orb,status)
  
  call calc_z_tune(lat%branch(0))
 
-! total_bend_angle = 0.0d0
-! do i=1,lat%n_ele_track
-!   if(lat%ele(i)%key == sbend$ .or. lat%ele(i)%key == rbend$) then
-!     total_bend_angle = total_bend_angle + lat%ele(i)%value(angle$)
-!   endif
-! enddo
+total_bend_angle = 0.0d0
+do i=1,lat%n_ele_track
+  if(lat%ele(i)%key == sbend$ .or. lat%ele(i)%key == rbend$) then
+    total_bend_angle = total_bend_angle + abs(lat%ele(i)%value(angle$))
+  endif
+enddo
 
 open(45,file='closed_orbit.out')
 do i=0,lat%n_ele_track

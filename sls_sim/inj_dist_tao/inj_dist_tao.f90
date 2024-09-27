@@ -15,7 +15,7 @@ integer, parameter :: grid_ny = 200
 integer, parameter :: nsigx = 3
 integer, parameter :: nPx = 400
 
-#define ORDINARY
+#define SIGM_RING
 
 !integer, parameter :: Nmc = 3000
 #ifdef SIGM_RING
@@ -118,6 +118,8 @@ emit_y = 1.806E-11
 emit_z = 4.367e-6
 long_beta = 6.0
 long_gamma = 0.167
+
+!! LCLS-2 Cathode
 
 Nx = 16 
 Ny = 16

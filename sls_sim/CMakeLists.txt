@@ -27,14 +27,14 @@ set (EXE_SPECS
  #cmake.patch_maker
 # cmake.tracker_adts
 # cmake.footprint
- #cmake.footprint_simple
+# cmake.footprint_simple
  #cmake.tracker_footprint
 # cmake.dynap_pz
 cmake.tracker_1
  #fix ele_noise_struct_in cmake.tracker_noise_multi
 # cmake.tracker_noise_single
 # cmake.portrait
-# cmake.tracker_simple
+ cmake.tracker_simple
 # cmake.tracker_dist
 # cmake.orm
 # cmake.orm_print

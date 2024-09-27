@@ -7,20 +7,26 @@ eps = 1e-6
 bmad_file_name = sys.argv[1]
 mad_file_name = sys.argv[2]
 
-bmad_lines = []
-with open(bmad_file_name,'r') as f:
-  for line in f:
-    if line.lstrip()[0] != '!':
-      bmad_lines.append(line)
+comments = ['!','*','@','$']
 
-mad_lines = []
-with open(mad_file_name,'r') as f:
-  for line in f:
-    if line.lstrip()[0] not in ['!','*','@','$']:
-      mad_lines.append(line)
+def parse_file(filename):
+  data = []
+  headers = []
+  with open(filename,'r') as f:
+    for line in f:
+      if line.lstrip()[0] not in comments:
+        data.append(line)
+      else:
+        headers.append(line)
+  return data, headers
 
-with open('mad.bmad_matched.twiss','w') as f:
+bmad_lines, bmad_headers = parse_file(bmad_file_name)
+mad_lines, mad_headers = parse_file(mad_file_name)
+
+with open('mad_bmad-matched.twiss','w') as f:
   mad_ptr = 0
+  for header in mad_headers: 
+    f.write(header)
   for bmad_line in bmad_lines:
     bmad_line_data = bmad_line.split()
     s_bmad = float(bmad_line_data[1])
