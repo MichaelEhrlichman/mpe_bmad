@@ -1,7 +1,7 @@
-set (EXENAME tunes)
+set (EXENAME long_phase_space)
 
 set (SRC_FILES
-  tunes/tunes.f90
+  long_phase_space/long_phase_space.f90
 )
 
 set (LINK_LIBS

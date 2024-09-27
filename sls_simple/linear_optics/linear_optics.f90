@@ -3,6 +3,7 @@ program linear_optics
 use bmad
 use write_lat_file_mod
 use bmad_parser_mod
+use mode3_mod
 !use sls_lib
 
 implicit none
@@ -59,12 +60,12 @@ call twiss_and_track(lat,orb,status)
  
  call calc_z_tune(lat%branch(0))
 
-! total_bend_angle = 0.0d0
-! do i=1,lat%n_ele_track
-!   if(lat%ele(i)%key == sbend$ .or. lat%ele(i)%key == rbend$) then
-!     total_bend_angle = total_bend_angle + lat%ele(i)%value(angle$)
-!   endif
-! enddo
+total_bend_angle = 0.0d0
+do i=1,lat%n_ele_track
+  if(lat%ele(i)%key == sbend$ .or. lat%ele(i)%key == rbend$) then
+    total_bend_angle = total_bend_angle + abs(lat%ele(i)%value(angle$))
+  endif
+enddo
 
 open(45,file='closed_orbit.out')
 do i=0,lat%n_ele_track
@@ -94,17 +95,17 @@ write(45,*) "!   total bend angle:     ", total_bend_angle / twopi * 360.0
 write(45,*) "!   total length:         ", lat%param%total_length
 write(45,*) "!   10^9 per mA:             ", 0.001 * lat%param%total_length / e_charge / c_light / 1.0e9
 
-write(45,'(a11,2a11,22a14,"   ",a17)') '!        ix', 's (m)', 'l (m)', 'beta_a', 'alpha_a', 'gamma_a', 'eta_a', 'etap_a', 'H_a', 'eta_x', 'etap_x', 'phi_x', &
-                      'beta_b', 'alpha_b', 'gamma_b', 'eta_b', 'etap_b', 'H_b', 'eta_y', 'etap_y', 'phi_y', 'name'
+write(45,'(a11,2a11,19a16,"   ",a14)') '!        ix', 's (m)', 'l (m)', 'beta_a', 'alpha_a', 'gamma_a', 'eta_a', 'etap_a', 'H_a', 'eta_x', 'etap_x', 'phi_x', &
+                      'beta_b', 'alpha_b', 'gamma_b', 'eta_b', 'etap_b', 'H_b', 'eta_y', 'etap_y', 'phi_y', 'energy', 'name'
 do i=1,lat%n_ele_track
   Ha = ( (lat%ele(i)%a%eta**2) + ( lat%ele(i)%a%beta*lat%ele(i)%a%etap + lat%ele(i)%a%alpha*lat%ele(i)%a%eta )**2)/lat%ele(i)%a%beta
   Hb = ( (lat%ele(i)%b%eta**2) + ( lat%ele(i)%b%beta*lat%ele(i)%b%etap + lat%ele(i)%b%alpha*lat%ele(i)%b%eta )**2)/lat%ele(i)%b%beta
-  write(45,'(i11,f11.5,f11.4,18es14.4,"   ",a14)') i, &
+  write(45,'(i11,f11.5,f11.4,19es16.7,"   ",a14)') i, &
         lat%ele(i)%s, lat%ele(i)%value(l$), &
         lat%ele(i)%a%beta, lat%ele(i)%a%alpha, lat%ele(i)%a%gamma, lat%ele(i)%a%eta, lat%ele(i)%a%etap, Ha, &
         lat%ele(i)%x%eta, lat%ele(i)%x%etap, lat%ele(i)%a%phi, &
         lat%ele(i)%b%beta, lat%ele(i)%b%alpha, lat%ele(i)%b%gamma, lat%ele(i)%b%eta, lat%ele(i)%b%etap, Hb, &
-        lat%ele(i)%y%eta, lat%ele(i)%y%etap, lat%ele(i)%b%phi, &
+        lat%ele(i)%y%eta, lat%ele(i)%y%etap, lat%ele(i)%b%phi, value_of_attribute(lat%ele(i),'e_tot'), &
         lat%ele(i)%name
 enddo
 close(45)
@@ -116,8 +117,8 @@ close(45)
 open(55,file='twiss_by_s.out')
 open(65,file='closed_orbit_by_a.out')
 
-write(55,'(a11,2a11,18a14,"   ",a20,a14)') '!        ix', 's (m)', 'l (m)', 'beta_a', 'alpha_a', 'gamma_a', 'eta_a', 'etap_a', 'H_a', 'eta_x', 'etap_x', 'phi_x', &
-                      'beta_b', 'alpha_b', 'gamma_b', 'eta_b', 'etap_b', 'H_b', 'eta_y', 'etap_y', 'phi_y', 'name', 'beam_size'
+write(55,'(a11,2a11,19a14,"   ",a20,a14)') '!        ix', 's (m)', 'l (m)', 'beta_a', 'alpha_a', 'gamma_a', 'eta_a', 'etap_a', 'H_a', 'eta_x', 'etap_x', 'phi_x', &
+                      'beta_b', 'alpha_b', 'gamma_b', 'eta_b', 'etap_b', 'H_b', 'eta_y', 'etap_y', 'phi_y', 'energy', 'name', 'beam_size'
 s=0.0
 delta_s = 0.01
 i=1
@@ -126,12 +127,12 @@ do while (s .lt. lat%param%total_length)
   write(65,'(i11,f11.5,6es14.4)') i, s, orb_at_s%vec(1:6)
   Ha = ( (ele_at_s%a%eta**2) + ( ele_at_s%a%beta*ele_at_s%a%etap + ele_at_s%a%alpha*ele_at_s%a%eta )**2)/ele_at_s%a%beta
   Hb = ( (ele_at_s%b%eta**2) + ( ele_at_s%b%beta*ele_at_s%b%etap + ele_at_s%b%alpha*ele_at_s%b%eta )**2)/ele_at_s%b%beta
-  write(55,'(i11,2f11.3,18es14.4,"   ",a20,2es14.4)') element_at_s(lat,s,.true.), &
+  write(55,'(i11,2f11.3,19es14.4,"   ",a20,2es14.4)') element_at_s(lat,s,.true.), &
         ele_at_s%s, delta_s, &
         ele_at_s%a%beta, ele_at_s%a%alpha, ele_at_s%a%gamma, ele_at_s%a%eta, ele_at_s%a%etap, Ha, &
         ele_at_s%x%eta, ele_at_s%x%etap, ele_at_s%a%phi, &
         ele_at_s%b%beta, ele_at_s%b%alpha, ele_at_s%b%gamma, ele_at_s%b%eta, ele_at_s%b%etap, Hb, &
-        ele_at_s%y%eta, ele_at_s%y%etap, ele_at_s%b%phi, &
+        ele_at_s%y%eta, ele_at_s%y%etap, ele_at_s%b%phi, value_of_attribute(ele_at_s,'e_tot'), &
         ele_at_s%name, sqrt(emitx*ele_at_s%a%beta + sigpop**2 * ele_at_s%a%eta**2), sqrt(emity*ele_at_s%b%beta)
   s = s + delta_s
   i = i + 1

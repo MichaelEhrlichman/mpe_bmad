@@ -1,7 +1,7 @@
-set (EXENAME tunes)
+set (EXENAME lc_optics)
 
 set (SRC_FILES
-  tunes/tunes.f90
+  lc_optics/lc_optics.f90
 )
 
 set (LINK_LIBS

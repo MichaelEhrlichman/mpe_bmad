@@ -1,7 +1,7 @@
-set (EXENAME tunes)
+set (EXENAME und_toss)
 
 set (SRC_FILES
-  tunes/tunes.f90
+  und_toss/und_toss.f90
 )
 
 set (LINK_LIBS

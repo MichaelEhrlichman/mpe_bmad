@@ -1,7 +1,7 @@
-set (EXENAME tunes)
+set (EXENAME rmat)
 
 set (SRC_FILES
-  tunes/tunes.f90
+  rmat/rmat.f90
 )
 
 set (LINK_LIBS
