@@ -11,13 +11,13 @@ set (EXE_SPECS
 #  cmake.amp_fact_PS_at_K2
 # cmake.make_hybrid_lat
 cmake.long_phase_space
-cmake.show_field
- cmake.toss
- cmake.toss_alphap
+#cmake.show_field
+# cmake.toss
+# cmake.toss_alphap
 # cmake.toss_many
 # cmake.toss_mc
 # #cmake.toss_envelope
-cmake.tunes
+#cmake.tunes
 #cmake.basic_stats
 # cmake.make_2fam
 # cmake.crm_frontend
@@ -31,14 +31,14 @@ cmake.tunes
 # cmake.phase_space
 # cmake.rad_int
 # cmake.for_dcs
- cmake.linear_optics
+# cmake.linear_optics
 # cmake.phase_beating
 # cmake.mode3_optics
 # cmake.linear_ma
-cmake.off_optics
-cmake.element_list
+#cmake.off_optics
+#cmake.element_list
  # cmake.extended_names
-cmake.phys_apertures
+ #cmake.phys_apertures
 # cmake.make_opa_eles
 # cmake.grid
 # cmake.one_turn_mat
