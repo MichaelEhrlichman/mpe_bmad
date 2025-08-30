@@ -15,7 +15,7 @@ integer, parameter :: grid_ny = 200
 integer, parameter :: nsigx = 3
 integer, parameter :: nPx = 400
 
-#define SIGM_RING
+#define ORDINARY
 
 !integer, parameter :: Nmc = 3000
 #ifdef SIGM_RING
@@ -28,7 +28,7 @@ character(9), parameter :: dist_type = 'grid_grid'
 #endif
 #ifdef ORDINARY
 integer, parameter :: Nmc = 9000
-character(9), parameter :: dist_type = 'flat_wted'
+character(9), parameter :: dist_type = 'true_gaus'
 !dist_type = 'true_gaus'
 !dist_type = 'flat_wted'
 !dist_type = 'flat_flat'

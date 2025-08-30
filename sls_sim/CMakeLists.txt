@@ -14,7 +14,7 @@ set (SRC_DIRS
 set (EXE_SPECS
  #cmake.bend_maker
  #cmake.injection
-# cmake.inj_dist_tao
+cmake.inj_dist_tao
 # cmake.tracker_train
 # cmake.special_chrom_set
  #cmake.write_quads

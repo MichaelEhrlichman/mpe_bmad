@@ -1,7 +1,6 @@
 program lc_optics
 
 use bmad
-use write_lat_file_mod
 use bmad_parser_mod
 
 implicit none

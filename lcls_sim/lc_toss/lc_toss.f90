@@ -63,7 +63,7 @@ program lc_toss
 !initial_x = 50e-6
 !vec_offset = 0.0d0
 !vec_offset(1) = initial_x
-vec_offset = (/ initial_x, 0.0d0, 0.0000d0, 0.0d0, 0.07143, -0.00612 /)
+vec_offset = (/ initial_x, 0.0d0, 0.0000d0, 0.0d0, 0.07143d0, -0.00612d0 /)
 open(20,file='lc_toss_vs_phi.dat')
 write(20,'(a,es14.5,a)') "#Nominal cavity phase is ", phi0*twopi, " radians."
 write(20,'(a8,a19,a15,6a15,a15)') "# step", "phase (rad)", "xi", "x", "xp", "y", "yp", "z", "zp", "p0c"

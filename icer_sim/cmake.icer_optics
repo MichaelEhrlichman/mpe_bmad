@@ -1,6 +1,7 @@
-set (EXENAME inj_dist_tao)
+set (EXENAME icer_optics)
+
 set (SRC_FILES
-  inj_dist_tao/inj_dist_tao.f90
+  icer_optics/icer_optics.f90
 )
 
 set (LINK_LIBS
