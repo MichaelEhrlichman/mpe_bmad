@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /home/mpe/DATA/repos/mpe_bmad/icer_sim/production
 
 # The main recursive "all" target.
 all: CMakeFiles/icer_optics-exe.dir/all
+all: CMakeFiles/tracker_icer-exe.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,6 +73,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/icer_optics-exe.dir/clean
+clean: CMakeFiles/tracker_icer-exe.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -99,6 +101,32 @@ icer_optics-exe: CMakeFiles/icer_optics-exe.dir/rule
 CMakeFiles/icer_optics-exe.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/icer_optics-exe.dir/build.make CMakeFiles/icer_optics-exe.dir/clean
 .PHONY : CMakeFiles/icer_optics-exe.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/tracker_icer-exe.dir
+
+# All Build rule for target.
+CMakeFiles/tracker_icer-exe.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles --progress-num=3,4,5 "Built target tracker_icer-exe"
+.PHONY : CMakeFiles/tracker_icer-exe.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/tracker_icer-exe.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tracker_icer-exe.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles 0
+.PHONY : CMakeFiles/tracker_icer-exe.dir/rule
+
+# Convenience name for target.
+tracker_icer-exe: CMakeFiles/tracker_icer-exe.dir/rule
+.PHONY : tracker_icer-exe
+
+# clean rule for target.
+CMakeFiles/tracker_icer-exe.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/clean
+.PHONY : CMakeFiles/tracker_icer-exe.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

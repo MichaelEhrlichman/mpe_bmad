@@ -1,3 +1,4 @@
 /home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles/icer_optics-exe.dir
+/home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles/tracker_icer-exe.dir
 /home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles/edit_cache.dir
 /home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles/rebuild_cache.dir

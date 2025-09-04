@@ -1,0 +1,59 @@
+ BEND_SUP[G] =  5.26553181700631256E-001   ! Not used in optimizing
+ BEND_R1[G] = -8.87122580556767154E-002   ! Not used in optimizing
+ BEND_MAIN[G] =  4.06720966237080428E-001   ! Not used in optimizing
+ BEND_R1[K1] =  2.98585302014697485E+000   ! Not used in optimizing
+ QD[K1] =  1.32064031236707393E+001   ! Not used in optimizing
+ QDS[K1] =  1.89120353898165909E+001   ! Not used in optimizing
+ BEND_SUP[K1] = -7.83087715749309243E+000   ! Not used in optimizing
+ BEND_MAIN[K1] = -4.98288924978255476E+000   ! Not used in optimizing
+ QS1[K1] = -6.14801526623107364E+000   ! Not used in optimizing
+ QS2[K1] = -4.28378360519386714E+000   ! Not used in optimizing
+ QS3[K1] =  1.27001347464613676E+001   ! Not used in optimizing
+ QS4[K1] =  8.83976349391643712E-001   ! Not used in optimizing
+ QS5[K1] =  5.19828302290434152E+000   ! Not used in optimizing
+ DS2[L] =  5.21202235765637063E-004   ! Not used in optimizing
+ DS3[L] =  3.65453857678589789E-001   ! Not used in optimizing
+ DS4[L] =  4.77145238540853722E-001   ! Not used in optimizing
+ DS5[L] =  8.87141375359579376E-001   ! Not used in optimizing
+ D1[L] =  5.35452366078675093E-002   ! Not used in optimizing
+ D2[L] =  1.06933207728029292E-001   ! Not used in optimizing
+ D3[L] =  5.00151972322717270E-002   ! Not used in optimizing
+ D1S[L] =  2.50000000000000000E-001   ! Not used in optimizing
+ D2S[L] =  1.00903114218382772E-001   ! Not used in optimizing
+ D3S[L] =  5.08719361187640468E-002   ! Not used in optimizing
+ SHAR_Y[K2] = -1.81794766884096390E+002   ! Not used in optimizing
+ SHAR_XY[K2] = -1.19707184815847576E+001   ! Not used in optimizing
+ SHAR_X[K2] =  2.39734455011883085E+002   ! Not used in optimizing
+ S2[K2] = -1.28161777638522358E+003   ! Not used in optimizing
+ S3[K2] = -1.07636890117836924E+003   ! Not used in optimizing
+ S1H[K2] =  3.23228293906366798E+003   ! Not used in optimizing
+ O1H[B3] = -7.70383156171869700E+002
+ BEGINNING[BETA_A] =  3.46602459422829634E+000   ! Not used in optimizing
+ BEGINNING[ALPHA_A] =  1.67562996028898026E-007   ! Not used in optimizing
+ BEGINNING[BETA_B] =  6.13993376935318191E-001   ! Not used in optimizing
+ BEGINNING[ALPHA_B] =  3.17329912424752985E-009   ! Not used in optimizing
+ BEGINNING[ETA_X] =  0.00000000000000000E+000   ! Not used in optimizing
+ BEGINNING[ETAP_X] =  0.00000000000000000E+000   ! Not used in optimizing
+ 
+ end_file
+ 
+ 
+ ! Top 10
+ 
+ Constraints                     Ref_Ele    Start_Ele   Ele/S    Meas-or-Lim    Model       Merit      Max_Loc
+ compaction[4]  t.5666 <target>                        END        0.0000E+00  -2.5517E-12  6.511E-24
+ all_k3[1]      O1H[B3]                                6.60      -1.0000E+30  -7.7038E+02  0.000E+00
+ Constraints                     Ref_Ele    Start_Ele   Ele/S    Meas-or-Lim    Model       Merit      Max_Loc
+ 
+  figure of merit: 6.511211E-24
+ 
+ List of non-zero contributors to the Merit Function:
+ Name                                          Merit           Sigma [= sqrt(Chi^2/N)]
+ compaction.comp                               6.5112E-24      2.5517E-12
+ 
+ Constraints                     Ref_Ele    Start_Ele   Ele/S    Meas-or-Lim    Model       Merit      Max_Loc
+ compaction[4]  t.5666 <target>                        END        0.0000E+00  -2.5517E-12  6.511E-24
+ all_k3[1]      O1H[B3]                                6.60      -1.0000E+30  -7.7038E+02  0.000E+00
+ Constraints                     Ref_Ele    Start_Ele   Ele/S    Meas-or-Lim    Model       Merit      Max_Loc
+ 
+  figure of merit: 6.511211E-24

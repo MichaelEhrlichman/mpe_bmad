@@ -10,6 +10,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/mpe/DATA/forks/bmad-ecosystem/util/Master.cmake"
   "/home/mpe/DATA/repos/mpe_bmad/icer_sim/CMakeLists.txt"
   "/home/mpe/DATA/repos/mpe_bmad/icer_sim/cmake.icer_optics"
+  "/home/mpe/DATA/repos/mpe_bmad/icer_sim/cmake.tracker_icer"
   "CMakeFiles/3.28.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.28.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.28.3/CMakeFortranCompiler.cmake"
@@ -62,4 +63,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/icer_optics-exe.dir/DependInfo.cmake"
+  "CMakeFiles/tracker_icer-exe.dir/DependInfo.cmake"
   )

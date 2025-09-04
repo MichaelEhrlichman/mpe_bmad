@@ -129,6 +129,19 @@ icer_optics-exe/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/icer_optics-exe.dir/build.make CMakeFiles/icer_optics-exe.dir/build
 .PHONY : icer_optics-exe/fast
 
+#=============================================================================
+# Target rules for targets named tracker_icer-exe
+
+# Build rule for target.
+tracker_icer-exe: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tracker_icer-exe
+.PHONY : tracker_icer-exe
+
+# fast build rule for target.
+tracker_icer-exe/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/build
+.PHONY : tracker_icer-exe/fast
+
 icer_optics/icer_optics.o: icer_optics/icer_optics.f90.o
 .PHONY : icer_optics/icer_optics.o
 
@@ -153,6 +166,54 @@ icer_optics/icer_optics.f90.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/icer_optics-exe.dir/build.make CMakeFiles/icer_optics-exe.dir/icer_optics/icer_optics.f90.s
 .PHONY : icer_optics/icer_optics.f90.s
 
+tracker_icer/track1_custom.o: tracker_icer/track1_custom.f90.o
+.PHONY : tracker_icer/track1_custom.o
+
+# target to build an object file
+tracker_icer/track1_custom.f90.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o
+.PHONY : tracker_icer/track1_custom.f90.o
+
+tracker_icer/track1_custom.i: tracker_icer/track1_custom.f90.i
+.PHONY : tracker_icer/track1_custom.i
+
+# target to preprocess a source file
+tracker_icer/track1_custom.f90.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.i
+.PHONY : tracker_icer/track1_custom.f90.i
+
+tracker_icer/track1_custom.s: tracker_icer/track1_custom.f90.s
+.PHONY : tracker_icer/track1_custom.s
+
+# target to generate assembly for a file
+tracker_icer/track1_custom.f90.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.s
+.PHONY : tracker_icer/track1_custom.f90.s
+
+tracker_icer/tracker_icer.o: tracker_icer/tracker_icer.f90.o
+.PHONY : tracker_icer/tracker_icer.o
+
+# target to build an object file
+tracker_icer/tracker_icer.f90.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o
+.PHONY : tracker_icer/tracker_icer.f90.o
+
+tracker_icer/tracker_icer.i: tracker_icer/tracker_icer.f90.i
+.PHONY : tracker_icer/tracker_icer.i
+
+# target to preprocess a source file
+tracker_icer/tracker_icer.f90.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.i
+.PHONY : tracker_icer/tracker_icer.f90.i
+
+tracker_icer/tracker_icer.s: tracker_icer/tracker_icer.f90.s
+.PHONY : tracker_icer/tracker_icer.s
+
+# target to generate assembly for a file
+tracker_icer/tracker_icer.f90.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tracker_icer-exe.dir/build.make CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.s
+.PHONY : tracker_icer/tracker_icer.f90.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,9 +223,16 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... icer_optics-exe"
+	@echo "... tracker_icer-exe"
 	@echo "... icer_optics/icer_optics.o"
 	@echo "... icer_optics/icer_optics.i"
 	@echo "... icer_optics/icer_optics.s"
+	@echo "... tracker_icer/track1_custom.o"
+	@echo "... tracker_icer/track1_custom.i"
+	@echo "... tracker_icer/track1_custom.s"
+	@echo "... tracker_icer/tracker_icer.o"
+	@echo "... tracker_icer/tracker_icer.i"
+	@echo "... tracker_icer/tracker_icer.s"
 .PHONY : help
 
 

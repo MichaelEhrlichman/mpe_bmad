@@ -29,7 +29,8 @@ real(rp) s, delta_s
 real(rp) oor
 real(rp) total_bend_angle
 real(rp) emitx, emity, sigpop
-real(rp) rho
+real(rp) rho, mu, Ialpha, sig_tao_lim2
+real(rp) :: sig_E0 = 6.21656E-04
 
 bp_com%always_parse = .true.
 bmad_com%radiation_damping_on = .false.
@@ -147,17 +148,33 @@ delta_s = 0.01
 nslices = floor(lat%param%total_length / delta_s)
 i=1
 allocate(partial_a(nslices))
+partial_a = 0.0d0
 do while (s .lt. lat%param%total_length)
   call twiss_and_track_at_s(lat, s, ele_at_s, orb, orb_at_s)
   rho = value_of_attribute(ele_at_s,"RHO",err_flag,.false.)
   if (.not. err_flag) then
-    partial_a(i) = ele_at_s%a%eta / rho * delta_s
+    partial_a(i) = ele_at_s%a%eta / rho
   endif
+  i=i+1
   s = s + delta_s
 enddo
 
+do i=1,nslices-1
+  partial_a(nslices-i) = partial_a(nslices-i) * delta_s + partial_a(nslices-i+1)
+enddo
+partial_a = partial_a / lat%param%total_length
+
+mu = sum(partial_a) / size(partial_a)
+Ialpha = sum((partial_a-mu)**2) / size(partial_a)
+sig_tao_lim2 = (lat%param%total_length/c_light)**2 * Ialpha * (sig_E0**2)
+write(*,*) "Ialpha: ", Ialpha
+write(*,*) "sig_tao_lim: ", sqrt(sig_tao_lim2)*1e12, " ps"
+write(*,*) "sig_l_lim: ", sqrt(sig_tao_lim2)*c_light*1e3, " mm"
+
+open(55,file='Ialpha.out')
+write(55,'(a12,a14)') "s (m)", "Ia (1)"
 do i=1,nslices
-  
+  write(55,'(f12.4, es14.4)') delta_s*i, partial_a(i)
 enddo
 
 end program
