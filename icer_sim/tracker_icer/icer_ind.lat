@@ -96,7 +96,7 @@ strline: line=(-half_s,half_s)
 sector: line=(half_s,corner,-half_s, sec_end)
 
 parameter[custom_attribute1] = custom::voltage
-induction_cell: custom, mat6_calc_method = tracking, voltage = 40e3
+induction_cell: custom, mat6_calc_method = tracking, voltage = 46.6671E+03
 
 rfcav: drift, l=0.0
 !rfcav: rfcavity, voltage = 0.50*1e6, harmon = 197, l = 0.0

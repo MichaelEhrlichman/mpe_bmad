@@ -16,13 +16,13 @@ program tracker_icer
 
   call getarg(1,lat_file)
 
-  n_turns = 1000
+  n_turns = 100000
 
   call bmad_parser(lat_file, lat)
 
-  call set_on_off(rfcavity$, lat, on$)
-  bmad_com%radiation_damping_on = .false.
-  bmad_com%radiation_fluctuations_on = .false.
+  !call set_on_off(rfcavity$, lat, on$)
+  bmad_com%radiation_damping_on = .true.
+  bmad_com%radiation_fluctuations_on = .true.
 
   call twiss_and_track(lat,co,status)
 
@@ -31,7 +31,7 @@ program tracker_icer
   open(100,file='tracker_simple.dat')
   write(100,'(a6,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
 
-  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.017d0 /)
+  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0 /)
   write(*,'(a,6es14.5)') "Initial Vector: ", orbit(0)%vec
 
   do i = 1, n_turns
