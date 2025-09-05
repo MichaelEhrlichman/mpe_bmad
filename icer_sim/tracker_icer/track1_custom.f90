@@ -50,7 +50,7 @@ logical err_flag, finished
 
 character(*), parameter :: r_name = 'track1_custom'
 
-real(rp) voltage, dE, length, p0c
+real(rp) voltage, dE, length, p0c, time
 
 integer i, n_slice
 
@@ -88,6 +88,10 @@ do i = 0, n_slice
   !   mat6(5:6, :) = matmul(m2, mat6(5:6, :))
   ! endif
 
+  !time = particle_rf_time(orbit,ele,.false.)
+  time = orbit%t - ele%ref_time
+  !write(*,*) mod(time,3.988986E-07), particle_rf_time(orbit,ele,.false.)
+
   dE = orbit%time_dir * voltage / n_slice
   if (i == 0 .or. i == n_slice) dE = dE / 2
 
@@ -113,5 +117,15 @@ if (ele%slave_status == slice_slave$ .or. ele%slave_status == super_slave$) then
 endif
 
 call offset_particle (ele, unset$, orbit)
+
+contains
+  function induction_cell_voltage(time,vmax) result(v)
+    real(rp) v
+    real(rp) time, vmax
+
+    if (abs(time) .gt. .667e-9) then 
+    endif    
+
+  end function
 
 end subroutine
