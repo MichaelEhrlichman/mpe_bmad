@@ -1,7 +1,7 @@
-set (EXENAME tracker_icer)
+set (EXENAME tracker_icer_many)
 
 set (SRC_FILES
-  tracker_icer/tracker_icer.f90
+  tracker_icer_many/tracker_icer_many.f90
   track1_custom.f90
 )
 

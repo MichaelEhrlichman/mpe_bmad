@@ -16,7 +16,7 @@ program tracker_icer
 
   call getarg(1,lat_file)
 
-  n_turns = 500000
+  n_turns = 20000000
 
   call bmad_parser(lat_file, lat)
 
@@ -31,7 +31,7 @@ program tracker_icer
   open(100,file='tracker_simple.dat')
   write(100,'(a8,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
 
-  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0 /)
+  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0,  0.00d0 /)
   !orbit(0)%vec = (/-3.82749E-05, -2.10461E-05,  8.11201E-07, -1.08117E-06,  1.55813E-02, -7.74824E-04/)
   write(*,'(a,6es14.5)') "Closed Orbit:   ", co(0)%vec
   write(*,'(a,6es14.5)') "Initial Vector: ", orbit(0)%vec

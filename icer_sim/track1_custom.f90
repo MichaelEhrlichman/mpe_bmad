@@ -44,22 +44,29 @@ type (ele_struct) :: ele
 type (ele_struct), pointer :: lord
 type (lat_param_struct) :: param
 type (track_struct), optional :: track
-type(all_pointer_struct) v_ptr
+type(all_pointer_struct) v_ptr, s_ptr, hv_ptr, ht_ptr
 
 logical err_flag, finished
 
 character(*), parameter :: r_name = 'track1_custom'
 
-real(rp) voltage, dE, length, p0c, time
+real(rp) voltage_nominal, slope, voltage
+real(rp) hornV, hornT
+real(rp) dE, length, p0c, time
+real(rp) beta0, T0
 
-integer i, n_slice
-
-! 
+integer i, n_slice, Nturns
 
 err_flag = .false.
 
 call pointer_to_attribute(ele,'VOLTAGE', .true., v_ptr, err_flag)
-voltage = v_ptr%r
+call pointer_to_attribute(ele,'SLOPE', .true., s_ptr, err_flag)
+call pointer_to_attribute(ele,'HORNV', .true., hv_ptr, err_flag)
+call pointer_to_attribute(ele,'HORNT', .true., ht_ptr, err_flag)
+voltage_nominal = v_ptr%r
+slope = s_ptr%r
+hornV = hv_ptr%r
+hornT = ht_ptr%r
 
 !zero-length induction cell for now
 n_slice = 1
@@ -67,16 +74,19 @@ length = 0
 
 p0c = orbit%p0c
 
+!call convert_pc_to(p0c,orbit%species,beta=beta0)
+!T0 = param%total_length/c_light/beta0
+
 call offset_particle (ele, set$, orbit)
 
 do i = 0, n_slice
   ! if (logic_option(.false., make_matrix)) then
-  !   factor = voltage / n_slice
+  !   factor = voltage_nominal / n_slice
   !   if (i == 0 .or. i == n_slice) factor = factor / 2
 
   !   dE = factor
   !   pc = (1 + orbit%vec(6)) * p0c 
-  !   E = pc / orbit%beta
+  !   E = p0c / orbit%beta
   !   call convert_total_energy_to (E + dE, orbit%species, beta = new_beta)
 
   !   m2(2,1) = 0.0
@@ -88,11 +98,22 @@ do i = 0, n_slice
   !   mat6(5:6, :) = matmul(m2, mat6(5:6, :))
   ! endif
 
-  !time = particle_rf_time(orbit,ele,.false.)
-  time = orbit%t - ele%ref_time
-  !write(*,*) mod(time,3.988986E-07), particle_rf_time(orbit,ele,.false.)
+  !Nturns = nint(orbit%t / T0)
+  !time = orbit%t - ele%ref_time - T0*Nturns
+  time = particle_rf_time(orbit, ele, .false.)
 
+  if (abs(time) .lt. hornT) then
+    !write(*,*) "no horn    ", time, orbit%vec(5)
+    voltage = voltage_nominal 
+  else if (time .ge. hornT) then
+    !write(*,*) "ge horn ***", time, orbit%vec(5)
+    voltage = voltage_nominal + hornV
+  else if (time .le. hornT) then
+    !write(*,*) "le horn ***", time, orbit%vec(5)
+    voltage = voltage_nominal - hornV
+  endif
   dE = orbit%time_dir * voltage / n_slice
+  !write(*,*) "time, voltage: ", time, voltage
   if (i == 0 .or. i == n_slice) dE = dE / 2
 
   call apply_energy_kick (dE, orbit, [0.0_rp, 0.0_rp])
