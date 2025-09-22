@@ -69,22 +69,9 @@ include CMakeFiles/tracker_icer-exe.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/tracker_icer-exe.dir/flags.make
 
-CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o: CMakeFiles/tracker_icer-exe.dir/flags.make
-CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o: /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/track1_custom.f90
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building Fortran object CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o"
-	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -c /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/track1_custom.f90 -o CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o
-
-CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing Fortran source to CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.i"
-	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -E /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/track1_custom.f90 > CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.i
-
-CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling Fortran source to assembly CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.s"
-	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -S /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/track1_custom.f90 -o CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.s
-
 CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o: CMakeFiles/tracker_icer-exe.dir/flags.make
 CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o: /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/tracker_icer.f90
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building Fortran object CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building Fortran object CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o"
 	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -c /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/tracker_icer.f90 -o CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o
 
 CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.i: cmake_force
@@ -95,16 +82,29 @@ CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling Fortran source to assembly CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.s"
 	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -S /home/mpe/DATA/repos/mpe_bmad/icer_sim/tracker_icer/tracker_icer.f90 -o CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.s
 
+CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o: CMakeFiles/tracker_icer-exe.dir/flags.make
+CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o: /home/mpe/DATA/repos/mpe_bmad/icer_sim/track1_custom.f90
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mpe/DATA/repos/mpe_bmad/icer_sim/production/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building Fortran object CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o"
+	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -c /home/mpe/DATA/repos/mpe_bmad/icer_sim/track1_custom.f90 -o CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o
+
+CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing Fortran source to CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.i"
+	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -E /home/mpe/DATA/repos/mpe_bmad/icer_sim/track1_custom.f90 > CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.i
+
+CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling Fortran source to assembly CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.s"
+	/home/mpe/DATA/forks/bmad-ecosystem/production/bin/mpifort $(Fortran_DEFINES) $(Fortran_INCLUDES) $(Fortran_FLAGS) -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2  -S /home/mpe/DATA/repos/mpe_bmad/icer_sim/track1_custom.f90 -o CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.s
+
 # Object files for target tracker_icer-exe
 tracker_icer__exe_OBJECTS = \
-"CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o" \
-"CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o"
+"CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o" \
+"CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o"
 
 # External object files for target tracker_icer-exe
 tracker_icer__exe_EXTERNAL_OBJECTS =
 
-/home/mpe/DATA/repos/mpe_bmad/production/bin/tracker_icer: CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o
 /home/mpe/DATA/repos/mpe_bmad/production/bin/tracker_icer: CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o
+/home/mpe/DATA/repos/mpe_bmad/production/bin/tracker_icer: CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o
 /home/mpe/DATA/repos/mpe_bmad/production/bin/tracker_icer: CMakeFiles/tracker_icer-exe.dir/build.make
 /home/mpe/DATA/repos/mpe_bmad/production/bin/tracker_icer: /home/mpe/DATA/forks/bmad-ecosystem/production/lib/libbsim.a
 /home/mpe/DATA/repos/mpe_bmad/production/bin/tracker_icer: /home/mpe/DATA/forks/bmad-ecosystem/production/lib/libxrlf03.a

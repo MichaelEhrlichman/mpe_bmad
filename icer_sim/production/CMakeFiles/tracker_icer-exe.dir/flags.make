@@ -8,7 +8,7 @@ Fortran_INCLUDES = -I/home/mpe/DATA/repos/mpe_bmad/icer_sim/../production/includ
 
 Fortran_FLAGS = -J/home/mpe/DATA/repos/mpe_bmad/icer_sim/../production/modules
 
-# Custom flags: CMakeFiles/tracker_icer-exe.dir/tracker_icer/track1_custom.f90.o_FLAGS = -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2 
-
 # Custom flags: CMakeFiles/tracker_icer-exe.dir/tracker_icer/tracker_icer.f90.o_FLAGS = -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2 
+
+# Custom flags: CMakeFiles/tracker_icer-exe.dir/track1_custom.f90.o_FLAGS = -Df2cFortran -DCESR_UNIX -DCESR_LINUX -u -traceback -cpp -fno-range-check -fdollar-ok -fbacktrace -Bstatic -ffree-line-length-none -DCESR_PLPLOT -DACC_MPI -I/home/mpe/DATA/forks/bmad-ecosystem/production/include -I/home/mpe/DATA/forks/bmad-ecosystem/production/lib -fPIC -O2 
 
