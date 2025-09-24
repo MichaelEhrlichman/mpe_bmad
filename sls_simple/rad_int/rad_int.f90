@@ -27,7 +27,7 @@ call twiss_and_track(lat,co,status)
 ix_cache = -1
 !call radiation_integrals(lat, co, mode, ix_cache)
 call radiation_integrals (lat, co, mode, ix_cache, rad_int_by_ele=rad_int_by_ele)
-call calc_z_tune(lat)
+call calc_z_tune(lat%branch(0))
 
 call write_output(6)
 open(60,file='rad_int.out')

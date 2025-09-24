@@ -7,27 +7,32 @@ program tracker_icer
 
   type(lat_struct) lat
   type(coord_struct), allocatable :: co(:), orbit(:)
+  real(rp), allocatable :: particle(:,:)
 
   procedure(track1_custom_def) :: track1_custom
 
-  integer i, n_turns, track_state, status
+  integer i, j
+  integer n_turns, track_state, status
+  integer n_part, part_ix
 
   character(100) lat_file
+  character(3) part_ix_str
+
+  real(rp) z_min, z_max, z0
 
   !mpi housekeeping
   integer num_workers, my_worker_num
   integer task_at_hand, n_tasks
   integer myrank, from_id
-  integer n_slave, cluster_size
+  integer cluster_size
   integer mpierr
   integer mpistatus(MPI_STATUS_SIZE)
   integer id, worker_status
   integer n_sent, n_recv
   integer mpi_i, incoming_ix
-  integer, allocatable :: task_list(:,:) 
-  integer, allocatable :: tasker(:) ![:]
+  integer tag, source_id
 
-  real(rp), allocatable :: results(:,:,:) ![:]  !coarray declaration
+  real(rp), allocatable :: results(:,:,:)
 
   logical master
   character*5 mode
@@ -43,9 +48,9 @@ program tracker_icer
   if(myrank .eq. 0) then
     master=.true.
     call mpi_comm_size(MPI_COMM_WORLD,cluster_size,mpierr)
-    n_slave=cluster_size-1
-    write(*,*) "Number of slaves: ", n_slave
-    if(n_slave .gt. 0) then
+    num_workers=cluster_size-1
+    write(*,*) "Number of slaves: ", num_workers
+    if(num_workers .gt. 0) then
       mode = 'multi'
     else
       mode = 'singl'
@@ -55,7 +60,7 @@ program tracker_icer
     mode = ''
   endif
 
-  n_turns = 20000000
+  call ran_seed_put(0,myrank)
 
   bp_com%always_parse = .true.
   call bmad_parser(lat_file, lat)
@@ -68,39 +73,60 @@ program tracker_icer
 
   allocate(orbit(0:lat%n_ele_track))
 
-  open(100,file='tracker_simple.dat')
-  write(100,'(a8,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
-
-  write(*,'(a,6es14.5)') "Closed Orbit:   ", co(0)%vec
-  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0,  0.00d0 /)
-  !orbit(0)%vec = (/-3.82749E-05, -2.10461E-05,  8.11201E-07, -1.08117E-06,  1.55813E-02, -7.74824E-04/)
-  write(*,'(a,6es14.5)') "Initial Vector: ", orbit(0)%vec
-
+  n_turns = 2000000
+  z_min = -0.5
+  z_max =  0.5
+  n_part = 64
+  allocate(particle(n_part,6))
+  
+  !make distribution
+  do i=1,n_part
+    z0 = z_min + (i-1)*(z_max-z_min)/(n_part-1)
+    particle(i,:) = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, z0, 0.0d0 /)
+  enddo 
 
   if(master) then
     if(mode == 'singl') then
       write(*,*) "Non-mpi environment or cluster size is 1.  Running in single core mode."
-      orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0,  0.00d0 /)
-      !orbit(0)%vec = (/-3.82749E-05, -2.10461E-05,  8.11201E-07, -1.08117E-06,  1.55813E-02, -7.74824E-04/)
-      write(*,'(a,6es14.5)') "Initial Vector: ", orbit(0)%vec
-      do i = 1, n_turns
-        call track_all(lat, orbit, track_state=track_state)
-        write(100,'(i8,6es14.5,i14)') i, orbit(0)%vec(1:6), track_state
-        if(track_state /= moving_forward$) then
-          write(*,*) "Particle lost at turn ", i
-          exit
-        endif
-        orbit(0) = orbit(lat%n_ele_track)
-        if (mod(i,10000) == 0) then
-          write(*,'(a,i8,a,i8,a)') "Turn ", i, " of ", n_turns, " complete."
-        endif
+      do part_ix = 1, n_part
+        write(part_ix_str,'(i3.3)') part_ix
+        open(50,file='particle_'//part_ix_str//'.out')
+        write(50,'(a8,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
+
+        call init_coord(orbit(0), particle(part_ix,:), lat%ele(0), element_end=upstream_end$)
+        do i = 1, n_turns
+          write(50,'(i8,6es14.5,i14)') i, orbit(0)%vec(1:6), track_state
+          call track_all(lat, orbit, track_state=track_state)
+          if(track_state /= moving_forward$) then
+            write(*,*) "Particle lost at turn ", i
+            exit
+          endif
+          orbit(0) = orbit(lat%n_ele_track)
+          !if (mod(i,10000) == 0) then
+          !  write(*,'(a,i8,a,i8,a)') "Turn ", i, " of ", n_turns, " complete."
+          !endif
+        enddo
+        close(50)
       enddo
     else
       n_sent = 0
-      do mpi_i=1,min(n_workers,n_part)
+      do mpi_i=1,min(num_workers,n_part)
         n_sent = n_sent + 1
         call mpi_send(mpi_i, 1, MPI_INTEGER, mpi_i, 1, MPI_COMM_WORLD, mpierr)
       enddo
+
+      do while(n_sent < n_part)
+        !call mpi_probe(MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, mpistatus, mpierr)  !blocking
+        call mpi_recv(part_ix, 1, MPI_INTEGER, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, mpistatus, mpierr)  !blocking
+        source_id = mpistatus(MPI_SOURCE)
+        n_sent = n_sent + 1
+        call mpi_send(n_sent, 1, MPI_INTEGER, source_id, 1, MPI_COMM_WORLD, mpierr)
+      enddo
+
+      do mpi_i=1,num_workers
+        call mpi_send(-1, 1, MPI_INTEGER, mpi_i, 4, MPI_COMM_WORLD, mpierr)
+      enddo
+      call mpi_finalize(mpierr)
     endif
   else
     do while(.true.)
@@ -108,29 +134,26 @@ program tracker_icer
       tag = mpistatus(MPI_TAG)
       if(tag .eq. 4) exit
       call mpi_recv(part_ix, 1, MPI_INTEGER, 0, 1, MPI_COMM_WORLD, mpistatus, mpierr)
+      write(*,'(a,i2,a,i3)') "worker ", myrank, " processing ", part_ix
+
+      write(part_ix_str,'(i3.3)') part_ix
+      open(50,file='particle_'//part_ix_str//'.out')
+      write(50,'(a8,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
+      call init_coord(orbit(0), particle(part_ix,:), lat%ele(0), element_end=upstream_end$)
 
       do i = 1, n_turns
         call track_all(lat, orbit, track_state=track_state)
-        write(100,'(i8,6es14.5,i14)') i, orbit(0)%vec(1:6), track_state
-        if(track_state /= moving_forward$) then
-          write(*,*) "Particle lost at turn ", i
-          exit
-        endif
+        write(50,'(i8,6es14.5,i14)') i, orbit(0)%vec(1:6), track_state
         orbit(0) = orbit(lat%n_ele_track)
-        if (mod(i,10000) == 0) then
-          write(*,'(a,i8,a,i8,a)') "Turn ", i, " of ", n_turns, " complete."
-        endif
       enddo
 
-      call mpi_send(track_state, 1, MPI_INTEGER, 0, 2, MPI_COMM_WORLD, mpierr) 
-      if( track_state .eq. moving_forward$) then
-        call mpi_send(vec, 6, MPI_DOUBLE_PRECISION, 0, 3, MPI_COMM_WORLD, mpierr)
-      endif
+      close(50)
+
+      call mpi_send(part_ix, 1, MPI_INTEGER, 0, 2, MPI_COMM_WORLD, mpierr)
     enddo
+    call mpi_finalize(mpierr)
     write(*,*) "Worker ", myrank, " peacefully exited loop."
   endif
-
-  close(100)
 end program
 
 

@@ -10,6 +10,7 @@ cmake.tracker_icer
 cmake.tracker_icer_many
 cmake.rad_int
 cmake.toss_alphap
+cmake.profile_simulator
 )
 
 include($ENV{ACC_BUILD_SYSTEM}/Master.cmake)

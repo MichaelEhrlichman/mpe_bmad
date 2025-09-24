@@ -29,7 +29,7 @@ cmake.tunes
 # cmake.smat_sizes
 #cmake.co
 # cmake.phase_space
-# cmake.rad_int
+cmake.rad_int
 # cmake.for_dcs
  cmake.linear_optics
 # cmake.phase_beating
