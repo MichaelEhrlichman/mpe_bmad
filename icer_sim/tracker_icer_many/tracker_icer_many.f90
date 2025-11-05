@@ -18,7 +18,7 @@ program tracker_icer
   character(100) lat_file
   character(3) part_ix_str
 
-  real(rp) z_min, z_max, z0
+  real(rp) z_min, z_max, z0, d0
 
   !mpi housekeeping
   integer num_workers, my_worker_num
@@ -73,17 +73,23 @@ program tracker_icer
 
   allocate(orbit(0:lat%n_ele_track))
 
-  n_turns = 2000000
+  n_turns = 100e3
   z_min = -0.5
   z_max =  0.5
-  n_part = 64
+  n_part = 1
+  d0 = 0.0
   allocate(particle(n_part,6))
   
   !make distribution
-  do i=1,n_part
-    z0 = z_min + (i-1)*(z_max-z_min)/(n_part-1)
-    particle(i,:) = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, z0, 0.0d0 /)
-  enddo 
+  if (n_part > 1) then
+    do i=1,n_part
+      z0 = z_min + (i-1)*(z_max-z_min)/(n_part-1)
+      particle(i,:) = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, z0, d0 /)
+    enddo
+  else
+    z0 = (z_max + z_min) / 2.0d0
+    particle(1,:) = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, z0, d0 /)
+  endif 
 
   if(master) then
     if(mode == 'singl') then
