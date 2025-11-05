@@ -24,7 +24,6 @@ program dynap_raster
   character(60) in_file
   character(100) lat_file_override
 
-  logical use_hybrid
   logical use_linear_bounds
   logical radiation
 
@@ -76,9 +75,7 @@ program dynap_raster
   complex(rp) amps(2)
 
   namelist / general /    lat_file, &
-                          use_hybrid
-
-  namelist / da_raster /  use_linear_bounds, &
+                          use_linear_bounds, &
                           tracking_method, &
                           injection_septum, &
                           radiation, &
@@ -99,7 +96,6 @@ program dynap_raster
   tracking_method = 1
   dE(:) = -999.
   n_turns = 100
-  use_hybrid = .false.
   use_linear_bounds = .false.
   n_naff = 64
 
@@ -139,7 +135,6 @@ program dynap_raster
     
   open (unit = 10, file = in_file, action='read')
   read (10, nml = general)
-  read (10, nml = da_raster)
   close (10)
 
   if( (mod(nx,2)==0) .or. (mod(ny,2)==0) ) then
@@ -188,18 +183,18 @@ program dynap_raster
     endif
   enddo
 
-!  if(master) then
-!    n_aperture_test = 0
-!    do i=1,ring%n_ele_track
-!      if( ring%ele(i)%value(x1_limit$) .gt. 1e-4 ) n_aperture_test = n_aperture_test + 1
-!    enddo
-!    if( (1.0*n_aperture_test)/ring%n_ele_track .lt. 0.5 ) then
-!      write(*,*) "Less than half the elements do not have a x1 physical aperture."
-!      write(*,*) "Probably something is wrong.  Check that lattice file defines aperture."
-!      write(*,*) "Aborting"
-!      stop
-!    endif
-!  endif
+  if(master) then
+    n_aperture_test = 0
+    do i=1,ring%n_ele_track
+      if( ring%ele(i)%value(x1_limit$) .gt. 1e-4 ) n_aperture_test = n_aperture_test + 1
+    enddo
+    if( (1.0*n_aperture_test)/ring%n_ele_track .lt. 0.5 ) then
+      write(*,*) "Less than half the elements do not have a x1 physical aperture."
+      write(*,*) "Probably something is wrong.  Check that lattice file defines aperture."
+      write(*,*) "Aborting"
+      stop
+    endif
+  endif
 
   if(tracking_method .gt. 0) then
     do i = 1, ring%n_ele_max
@@ -302,6 +297,7 @@ program dynap_raster
       write(20,'(i9,500f9.5)') ny, (simple_grid(1,k)%y,k=1,ny)
       write(30,'(i9,500f9.5)') ny, (simple_grid(1,k)%y,k=1,ny)
       write(40,'(a,i6,a,i6)') "# nx= ", nx, " ny=", ny
+      write(40,'(4A10)') "# x0", "y0", "Qx", "Qy"
       do j=1,nx
         write(20,'(f9.5)',advance='no') simple_grid(j,1)%x
         write(30,'(f9.5)',advance='no') simple_grid(j,1)%x
@@ -342,10 +338,8 @@ program dynap_raster
 
       orb(injection_septum) = co(injection_septum)
       orb(injection_septum)%vec = 0.0d0
-      orb(injection_septum)%vec(1) = raster_points(ix)%x !FOO
-      !orb(0)%vec(3) = raster_points(ix)%y
-      write(*,*) "FOO: vertical axis hacked to xp"
-      orb(injection_septum)%vec(2) = raster_points(ix)%y !FOO
+      orb(injection_septum)%vec(1) = raster_points(ix)%x 
+      orb(injection_septum)%vec(3) = raster_points(ix)%y
       raster_points(ix)%alive = 1.0
       raster_points(ix)%nu_x = -1.0
       raster_points(ix)%nu_y = -1.0

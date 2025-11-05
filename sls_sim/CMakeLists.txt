@@ -20,16 +20,16 @@ set (EXE_SPECS
  #cmake.write_quads
 # cmake.dynap_slim
 # cmake.dynap_linear
-# cmake.dynap_raster
- #cmake.aperture_and_lifetime
+ cmake.dynap_raster
+ cmake.aperture_and_lifetime
  #cmake.divergence_aperture
  #cmake.scan_dp
  #cmake.patch_maker
 # cmake.tracker_adts
 # cmake.footprint
 # cmake.footprint_simple
- #cmake.tracker_footprint
-# cmake.dynap_pz
+#cmake.tracker_footprint
+cmake.dynap_pz
 cmake.tracker_1
  #fix ele_noise_struct_in cmake.tracker_noise_multi
 # cmake.tracker_noise_single

@@ -10,7 +10,7 @@ set (EXE_SPECS
 #  cmake.amp_fact_B_to_Q_via_K2
 #  cmake.amp_fact_PS_at_K2
 # cmake.make_hybrid_lat
-cmake.long_phase_space
+# cmake.long_phase_space
 #cmake.show_field
 # cmake.toss
 # cmake.toss_alphap
@@ -28,7 +28,7 @@ cmake.long_phase_space
 # cmake.ptc_via_bmad
 # cmake.smat_sizes
 #cmake.co
-# cmake.phase_space
+cmake.phase_space
 # cmake.rad_int
 # cmake.for_dcs
 # cmake.linear_optics

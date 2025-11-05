@@ -5,22 +5,8 @@ set (SRC_FILES
 )
 
 set (LINK_LIBS
-  util_programs
   sls_lib
   bmad
   sim_utils
-  recipes_f-90_LEPP
-  fgsl
-  gsl
-  gslcblas
-  forest
-  xrlf03
-  xrl
-  lapack95
-  lapack
-  blas
-  hdf5hl_fortran
-  hdf5_hl
-  hdf5_fortran
-  hdf5
+  ${ACC_BMAD_LINK_LIBS}
 )

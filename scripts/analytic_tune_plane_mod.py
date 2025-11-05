@@ -2,7 +2,7 @@
 
 import pylab, math
 import numpy as np
-from fractions import gcd
+from math import gcd
 from operator import add
 from functools import reduce
 

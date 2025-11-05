@@ -3,22 +3,13 @@ set (SRC_FILES
   tracker_footprint/tracker_footprint.f90
 )
 
-set (FFLAGS "-coarray")
-set (LINK_FLAGS "-coarray")
+set (FFLAGS "-fcoarray=lib")
+set (LINK_FLAGS "-fcoarray=lib")
 
 set (LINK_LIBS
   sls_sim
   sls_lib
   bmad
   sim_utils
-  recipes_f-90_LEPP
-  fgsl
-  gsl
-  gslcblas
-  forest
-  xrlf03
-  xrl
-  lapack95
-  lapack
-  blas
+  ${ACC_BMAD_LINK_LIBS}
 )

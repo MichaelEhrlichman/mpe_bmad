@@ -29,8 +29,8 @@ program tracker_footprint
   real(rp) x, y, dx, dy
   real(rp) pz
   real(rp) init_vec(6)
-  real(rp), allocatable :: results(:,:,:) ![:]  !coarray declaration
-  integer, allocatable :: tasker(:) ![:]
+  real(rp), allocatable :: results(:,:,:)[:]  !coarray declaration
+  integer, allocatable :: tasker(:)[:]
 
   real(rp) tunes(1)
   complex(rp) amps(1)
@@ -46,8 +46,7 @@ program tracker_footprint
   !mpi housekeeping
   integer myrank, from_id
   integer n_slave, cluster_size
-  integer mpierr
-  integer mpistatus(MPI_STATUS_SIZE)
+  !integer mpistatus(MPI_STATUS_SIZE)
   logical master
   character*5 mode
   integer n_sent, n_recv
@@ -63,11 +62,9 @@ program tracker_footprint
   endif
 
   ! mpi stuff
-  call mpi_init(mpierr)                             ! Introduce yourself to the MPI daemon
-  call mpi_comm_rank(MPI_COMM_WORLD,myrank,mpierr)  ! Get your rank number, store in myrank.  Master is rank 0.
   if(myrank .eq. 0) then
     master=.true.
-    call mpi_comm_size(MPI_COMM_WORLD,cluster_size,mpierr)
+    cluster_size = num_images()
     n_slave=cluster_size-1
     write(*,*) "Number of slaves: ", n_slave
     if(n_slave .gt. 0) then
