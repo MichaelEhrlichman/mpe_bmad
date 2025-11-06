@@ -20,7 +20,6 @@ real kd, kf
 
 real gbend(3)
 real L0(3)
-real L0_
 real sigma_pz
 real n_turns_in !namelist doesn't support exponential integers
 real diffusion_parameter
@@ -113,11 +112,11 @@ do i=1,n_turns
     last_progress = progress
   endif
   do j=1,3
-    L0_ = L0(j)
-    a_kick = kick(pz, gbend(j), L0_)
+    a_kick = kick(pz, gbend(j), L0(j))
     pz = pz + a_kick
   enddo
-  z = z + alpha(pz)*pz * C0 +3.30237e-07
+  z = z + alpha(pz)*pz*C0 !+ 3.30237e-07
+  z = mod(z,C0)
 enddo
 close(10)
 write(*,*) "Complete!"
