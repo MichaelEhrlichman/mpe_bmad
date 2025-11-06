@@ -26,10 +26,11 @@ real n_turns_in !namelist doesn't support exponential integers
 real diffusion_parameter
 
 integer n_report
-integer(8) n_turns
-integer i, j, k
+integer(8) i, n_turns
+integer j, k
 integer particle_id
 integer ierr
+integer progress, last_progress
 
 character(20) in_file, out_file
 character(3) ix_str
@@ -39,6 +40,8 @@ logical diags
 namelist /params/ z0, pz0, sigma_pz, n_turns_in, diags, n_report
 
 call random_seed()
+
+last_progress = 0
 
 !beam description
 n_turns_in=20.0e6
@@ -57,6 +60,8 @@ read(10, nml=params) !, iostat=ierr)
 close(10)
 
 n_turns = n_turns_in
+
+write(*,'(a,i12,a)') "Tracking for ", n_turns, " turns."
 
 if(pz0 .lt. 0.0d0) then
   if(sigma_pz > 0) then
@@ -102,6 +107,11 @@ do i=1,n_turns
   if (mod(i,n_report) == 0) then
     write(10,'(i14,2es14.4)') i, z, pz
   endif
+  progress = int(100.0 * i / n_turns)
+  if (progress >= last_progress + 10) then
+    write(*,'(i12,a)') progress, "% complete"
+    last_progress = progress
+  endif
   do j=1,3
     L0_ = L0(j)
     a_kick = kick(pz, gbend(j), L0_)
@@ -110,6 +120,7 @@ do i=1,n_turns
   z = z + alpha(pz)*pz * C0 +3.30237e-07
 enddo
 close(10)
+write(*,*) "Complete!"
 
 contains
 
