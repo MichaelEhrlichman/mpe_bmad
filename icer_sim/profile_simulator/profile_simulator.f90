@@ -32,7 +32,7 @@ integer ierr
 integer progress, last_progress
 
 character(20) in_file, out_file
-character(3) ix_str
+character(4) ix_str
 
 logical diags
 
@@ -52,7 +52,7 @@ n_report = 1
 
 call get_command_argument(1, in_file)
 call get_command_argument(2, ix_str)
-read(ix_str,'(i3)') particle_id
+read(ix_str,'(i4)') particle_id
 
 open(unit=10, file=in_file, status='old', action='read') !, iostat=ierr)
 read(10, nml=params) !, iostat=ierr)
@@ -99,7 +99,7 @@ endif
 
 pz = pz0
 z = z0
-write(out_file,'(a,i3.3,a)') 'z_',particle_id,'.dat'
+write(out_file,'(a,i4.4,a)') 'z_',particle_id,'.dat'
 open(10,file=out_file)
 write(10,'(a14,a14,a14)') "# turn", "z", "pz"
 do i=1,n_turns
