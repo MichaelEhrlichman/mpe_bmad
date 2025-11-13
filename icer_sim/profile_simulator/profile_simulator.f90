@@ -116,7 +116,7 @@ do i=1,n_turns
     pz = pz + a_kick
   enddo
   z = z + alpha(pz)*pz*C0 !+ 3.30237e-07
-  z = mod(z+C0, 2*C0) - C0
+  z = modulo(z+C0/2.0, C0) - C0/2.0
 enddo
 close(10)
 write(*,*) "Complete!"
