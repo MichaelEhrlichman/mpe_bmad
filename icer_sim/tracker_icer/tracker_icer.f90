@@ -7,16 +7,25 @@ program tracker_icer
   type(coord_struct), allocatable :: co(:), orbit(:)
 
   procedure(track1_custom_def) :: track1_custom
+  procedure(make_mat6_custom_def) :: make_mat6_custom
 
   integer i, n_turns, track_state, status
+  integer part_ix
 
-  character(100) lat_file
+  character(100) lat_file, out_file
+  character(4) part_ix_str
+
+  real(rp) vec_offset(6), initial_vector(6)
 
   track1_custom_ptr => track1_custom
+  make_mat6_custom_ptr => make_mat6_custom
 
   call getarg(1,lat_file)
+  call getarg(2,part_ix_str)
 
-  n_turns = 20000000
+  read(part_ix_str,*) part_ix
+
+  n_turns = 20e6
 
   call bmad_parser(lat_file, lat)
 
@@ -25,16 +34,24 @@ program tracker_icer
   bmad_com%radiation_fluctuations_on = .true.
 
   call twiss_and_track(lat,co,status)
+  !call closed_orbit_calc(lat,co,5)
+  !call twiss_at_start(lat)
+  !call twiss_propagate_all(lat)
 
   allocate(orbit(0:lat%n_ele_track))
 
-  open(100,file='tracker_simple.dat')
+  write(out_file,'(a,i4.4,a)') 'tracker_icer_',part_ix,'.dat'
+  write(*,*) out_file
+  open(100,file=out_file)
   write(100,'(a8,6a14,a14)') "# turn", "x", "px", "y", "py", "z", "pz", "track state"
 
-  orbit(0)%vec = co(0)%vec + (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0,  0.00d0 /)
-  !orbit(0)%vec = (/-3.82749E-05, -2.10461E-05,  8.11201E-07, -1.08117E-06,  1.55813E-02, -7.74824E-04/)
-  write(*,'(a,6es14.5)') "Closed Orbit:   ", co(0)%vec
-  write(*,'(a,6es14.5)') "Initial Vector: ", orbit(0)%vec
+  !vec_offset = (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0 /)
+  !initial_vector = co(0)%vec + vec_offset
+  initial_vector = 0.0d0
+  call init_coord(orbit(0),initial_vector,lat%ele(0),element_end=upstream_end$)
+
+  !write(*,'(a,6es14.5)') "Closed Orbit:   ", co(0)%vec
+  write(*,'(a,6es14.5)') "Initial Vector: ", initial_vector
 
   do i = 1, n_turns
     call track_all(lat, orbit, track_state=track_state)

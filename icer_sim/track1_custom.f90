@@ -74,46 +74,19 @@ length = 0
 
 p0c = orbit%p0c
 
-!call convert_pc_to(p0c,orbit%species,beta=beta0)
-!T0 = param%total_length/c_light/beta0
-
 call offset_particle (ele, set$, orbit)
 
 do i = 0, n_slice
-  ! if (logic_option(.false., make_matrix)) then
-  !   factor = voltage_nominal / n_slice
-  !   if (i == 0 .or. i == n_slice) factor = factor / 2
-
-  !   dE = factor
-  !   pc = (1 + orbit%vec(6)) * p0c 
-  !   E = p0c / orbit%beta
-  !   call convert_total_energy_to (E + dE, orbit%species, beta = new_beta)
-
-  !   m2(2,1) = 0.0
-  !   m2(2,2) = orbit%beta / new_beta 
-  !   m2(1,1) = new_beta / orbit%beta
-  !   m2(1,2) = orbit%vec(5) * mc2**2 * p0c * (m2(2,2) / ((E+dE)**3 * orbit%beta) - new_beta / (pc**2 * E))
-  !   if (orbit%time_dir == -1) call mat_inverse(m2, m2)
-
-  !   mat6(5:6, :) = matmul(m2, mat6(5:6, :))
-  ! endif
-
-  !Nturns = nint(orbit%t / T0)
-  !time = orbit%t - ele%ref_time - T0*Nturns
   time = particle_rf_time(orbit, ele, .false.)
 
   if (abs(time) .lt. hornT) then
-    !write(*,*) "no horn    ", time, orbit%vec(5)
     voltage = voltage_nominal 
   else if (time .ge. hornT) then
-    !write(*,*) "ge horn ***", time, orbit%vec(5)
     voltage = voltage_nominal + hornV
   else if (time .le. hornT) then
-    !write(*,*) "le horn ***", time, orbit%vec(5)
     voltage = voltage_nominal - hornV
   endif
   dE = orbit%time_dir * voltage / n_slice
-  !write(*,*) "time, voltage: ", time, voltage
   if (i == 0 .or. i == n_slice) dE = dE / 2
 
   call apply_energy_kick (dE, orbit, [0.0_rp, 0.0_rp])
@@ -138,15 +111,5 @@ if (ele%slave_status == slice_slave$ .or. ele%slave_status == super_slave$) then
 endif
 
 call offset_particle (ele, unset$, orbit)
-
-contains
-  function induction_cell_voltage(time,vmax) result(v)
-    real(rp) v
-    real(rp) time, vmax
-
-    if (abs(time) .gt. .667e-9) then 
-    endif    
-
-  end function
 
 end subroutine

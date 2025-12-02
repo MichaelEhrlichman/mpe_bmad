@@ -3,6 +3,7 @@ set (EXENAME tracker_icer)
 set (SRC_FILES
   tracker_icer/tracker_icer.f90
   track1_custom.f90
+  make_mat6_custom.f90
 )
 
 set (LINK_LIBS

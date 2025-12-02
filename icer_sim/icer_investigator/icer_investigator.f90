@@ -1,4 +1,4 @@
-program toss_alphap
+program icer_investigator
   use bmad
   use bmad_parser_mod, only: bp_com
 
@@ -85,16 +85,6 @@ program toss_alphap
     write(*,'(i6,6es15.6)') i, orb(lat%n_ele_track)%vec
     orb(0) = orb(lat%n_ele_track)
   enddo
-
-  open(20,file='toss_alphap.dat')
-  do i=1, npart
-    pz = -pzm + 2*(i-1)*pzm/(npart-1)
-    vec_offset = (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, pz /)
-    call init_coord(orb(0),co(0)%vec+vec_offset,lat%ele(0),element_end=upstream_end$)
-    call track_all(lat,orb)
-    write(20,'(i8,es15.6,6es15.6)') i, pz, orb(lat%n_ele_track)%vec
-  enddo
-  close(20)
 
 end program
 

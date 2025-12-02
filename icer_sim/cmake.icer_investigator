@@ -1,7 +1,7 @@
-set (EXENAME toss_alphap)
+set (EXENAME icer_investigator)
 
 set (SRC_FILES
-  toss_alphap/toss_alphap.f90
+  icer_investigator/icer_investigator.f90
   track1_custom.f90
   make_mat6_custom.f90
 )
