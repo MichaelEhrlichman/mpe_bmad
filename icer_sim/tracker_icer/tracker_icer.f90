@@ -1,5 +1,6 @@
 program tracker_icer
   use bmad
+  use bmad_parser_mod, only: bp_com
  
   implicit none
 
@@ -26,6 +27,8 @@ program tracker_icer
   read(part_ix_str,*) part_ix
 
   n_turns = 20e6
+
+  bp_com%always_parse = .true.
 
   call bmad_parser(lat_file, lat)
 
