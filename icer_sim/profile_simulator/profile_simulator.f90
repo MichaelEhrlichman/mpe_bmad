@@ -10,19 +10,19 @@ real(dp), parameter :: rc = 2.817d-15 ! m
 real(dp), parameter :: hbar = 6.582119569d-16 ! eV s
 real(dp), parameter :: me = 511000.0d0 ! eV / c^2
 
-real z, z0
-real pz, pz0
-real C0
-real g0
-real a_kick
-real Jz
-real kd, kf
+real(dp) z, z0
+real(dp) pz, pz0
+real(dp) C0
+real(dp) g0
+real(dp) a_kick
+real(dp) Jz
+real(dp) kd, kf
 
-real gbend(3)
-real L0(3)
-real sigma_pz
-real n_turns_in !namelist doesn't support exponential integers
-real diffusion_parameter
+real(dp) gbend(3)
+real(dp) L0(3)
+real(dp) sigma_pz
+real(dp) n_turns_in !namelist doesn't support exponential integers
+real(dp) diffusion_parameter
 
 integer n_report
 integer(8) i, n_turns
@@ -104,7 +104,7 @@ open(10,file=out_file)
 write(10,'(a14,a14,a14)') "# turn", "z", "pz"
 do i=1,n_turns
   if (mod(i,n_report) == 0) then
-    write(10,'(i14,2es14.4)') i, z, pz
+    write(10,'(i14,2es16.7)') i, z, pz
   endif
   progress = int(100.0 * i / n_turns)
   if (progress >= last_progress + 10) then
@@ -115,7 +115,12 @@ do i=1,n_turns
     a_kick = kick(pz, gbend(j), L0(j))
     pz = pz + a_kick
   enddo
-  z = z + alpha(pz)*pz*C0 !+ 3.30237e-07
+  pz = pz + barrier(z)
+  !if (abs(pz) .gt. 0.02) then
+  !  write(*,'(a,i12)') "Particle lost at turn ", i
+  !  exit
+  !endif
+  z = z + alpha(pz)*pz*C0
   z = modulo(z+C0/2.0, C0) - C0/2.0
 enddo
 close(10)
@@ -124,8 +129,8 @@ write(*,*) "Complete!"
 contains
 
   function alpha(pz)
-    real pz, alpha
-    real a1, a2, a3, a4
+    real(dp) pz, alpha
+    real(dp) a1, a2, a3, a4
     !alpha = 1e-6 * pz - 2e-2 * pz**2 + 1e-0 * pz**3
     !tru zero
     ! a1 = 2.6112753e-07
@@ -139,14 +144,38 @@ contains
     alpha = a1 + a2*pz + a3*pz**2 + a4*pz**3
   end function
 
-  function kick(pz,gbend,L0)
-    real kick, pz
-    real kick_d, kick_f
-    real gbend, L0
+  function barrier(z)
+    real(dp) barrier, z
+    real(dp) barrier_z, barrier_width
+    real(dp) barrier_kick, reset_kick
+    real(dp) E0, U0, pz0
 
+    barrier_z = C0 * 0.90
+    barrier_width = 0.10 !0.334 ns
+    E0 = 1e9
+    U0 = 45.3e3 
+    pz0 = U0 / E0
+
+    !barrier_kick = 0.1 * pz0
+    barrier_kick = 0.01 * pz0
+    reset_kick = -10.0 * pz0
+
+    if (abs(z) .lt. barrier_z) then
+      barrier = 0.0d0
+    elseif (abs(z) .lt. barrier_z+barrier_width) then
+      barrier = barrier_kick * sign(1.0d0,z)
+    else
+      barrier = reset_kick
+    endif
+  end function
+
+  function kick(pz,gbend,L0)
+    real(dp) kick, pz
+    real(dp) kick_d, kick_f
+    real(dp) gbend, L0
     kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2 - 1.0d0 )
     kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0+pz)**2
-    kick = (kick_d + kick_f)
+    kick = kick_d + kick_f
   end function
 
   function xi()
