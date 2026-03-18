@@ -17,6 +17,7 @@ real(dp) g0
 real(dp) a_kick
 real(dp) Jz
 real(dp) kd, kf
+real(dp) cell_kick
 
 real(dp) gbend(3)
 real(dp) L0(3)
@@ -82,6 +83,13 @@ L0 = (/ 2.0, 14.4, 16.0 /)
 kd = g0**3 * 2.0d0 * rc / 3.0d0 * (Jz/2.0d0)
 kf = g0**5 * 55.0*rc*hbar/24.0/sqrt(3.0)/(me/clight/clight)/clight
 
+!calculate nominal restoring kick
+cell_kick = 0.0d0
+do j=1,3
+  cell_kick = cell_kick + kd * L0(j) * gbend(j)**2
+enddo
+write(*,*) "Cell kick: ", cell_kick
+
 if(diags) then
   diffusion_parameter = 0.0d0
   do i=1,3
@@ -115,6 +123,7 @@ do i=1,n_turns
     a_kick = kick(pz, gbend(j), L0(j))
     pz = pz + a_kick
   enddo
+  pz= pz + cell_kick * (1.0e0 + 0.00001*sin(two_pi * 2.0 / 10.0 * z))  !restoring kick from induction cell
   pz = pz + barrier(z)
   !if (abs(pz) .gt. 0.02) then
   !  write(*,'(a,i12)') "Particle lost at turn ", i
@@ -150,8 +159,8 @@ contains
     real(dp) barrier_kick, reset_kick
     real(dp) E0, U0, pz0
 
-    barrier_z = C0 * 0.90
-    barrier_width = 0.10 !0.334 ns
+    barrier_z = 10.0 !C0 * 0.90
+    barrier_width = 5.0
     E0 = 1e9
     U0 = 45.3e3 
     pz0 = U0 / E0
@@ -173,8 +182,9 @@ contains
     real(dp) kick, pz
     real(dp) kick_d, kick_f
     real(dp) gbend, L0
-    kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2 - 1.0d0 )
-    kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0+pz)**2
+    !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2 - 1.0d0 )  !E restored
+    kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2)  !E not restored
+    kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0d0+pz)**2
     kick = kick_d + kick_f
   end function
 
