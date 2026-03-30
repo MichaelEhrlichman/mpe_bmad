@@ -6,18 +6,23 @@ integer, parameter :: dp = 8
 
 real(dp), parameter :: two_pi = 2.0d0 * 3.14159265359d0
 real(dp), parameter :: clight = 299792458.0d0 ! m/s
-real(dp), parameter :: rc = 2.817d-15 ! m
+real(dp), parameter :: rc = 2.817d-15 ! m, classical e- radius
 real(dp), parameter :: hbar = 6.582119569d-16 ! eV s
 real(dp), parameter :: me = 511000.0d0 ! eV / c^2
+real(dp), parameter :: Cq = 3.832e-13 ! m for e-
 
 real(dp) z, z0
 real(dp) pz, pz0
 real(dp) C0
-real(dp) g0
+real(dp) g0, E0
 real(dp) a_kick
 real(dp) Jz
 real(dp) kd, kf
 real(dp) cell_kick
+real(dp) mod_amp
+real(dp) I2, I3
+real(dp) sigma_p
+real(dp) barrier_z
 
 real(dp) gbend(3)
 real(dp) L0(3)
@@ -45,8 +50,8 @@ last_progress = 0
 
 !beam description
 n_turns_in=20.0e6
-z0 = 0.0
-pz0 = 0.0 !0.01 ! initial pz
+z0 = 0.0d0
+pz0 = 0.0d0 !0.01 ! initial pz
 sigma_pz = -1
 diags = .false.
 n_report = 1
@@ -73,22 +78,34 @@ if(pz0 .lt. 0.0d0) then
 endif
 
 !lattice description
-C0 = 119.587
-g0 = 1957.0 ! relativistic gamma
-Jz = 1.569 ! damping partition number
+C0 = 119.587d0
+g0 = 1957.0d0 ! relativistic gamma
+E0 = g0 * me
+Jz = 1.569d0 ! damping partition number
        ! bend_sup, bend_r1, bend_main
-gbend = (/ 1.0/1.88, 1.0/12.2, 1.0/2.5 /)
-L0 = (/ 2.0, 14.4, 16.0 /)
+gbend = (/ 1.0d0/1.88d0, 1.0d0/12.2d0, 1.0d0/2.5d0 /)
+L0 = (/ 2.0d0, 14.4d0, 16.0d0 /)
 
 kd = g0**3 * 2.0d0 * rc / 3.0d0 * (Jz/2.0d0)
 kf = g0**5 * 55.0*rc*hbar/24.0/sqrt(3.0)/(me/clight/clight)/clight
 
 !calculate nominal restoring kick
+barrier_z = 20.0 !C0 * 0.90
 cell_kick = 0.0d0
+I2 = 0.0d0
+I3 = 0.0d0
 do j=1,3
+  I2 = I2 + gbend(j)**2*L0(j)
+  I3 = I3 + gbend(j)**3*L0(j)
   cell_kick = cell_kick + kd * L0(j) * gbend(j)**2
 enddo
-write(*,*) "Cell kick: ", cell_kick
+!write(*,*) "Cell kick: ", cell_kick
+sigma_p = sqrt(Cq * g0**2 * I3 / Jz / I2)
+write(*,'(a,es10.3,a,f10.3,a)') "Rad Int Energy Spread: ", sigma_p*100, "% (", sigma_p*E0/1000, " keV)"
+
+!modulation amplitude
+mod_amp = 0.0000100d0
+write(*,'(a,f9.6,a,f8.3,a)') "Modulation amplitude is ", mod_amp*100, "% (", E0*mod_amp/1000, " keV)"
 
 if(diags) then
   diffusion_parameter = 0.0d0
@@ -120,15 +137,10 @@ do i=1,n_turns
     last_progress = progress
   endif
   do j=1,3
-    a_kick = kick(pz, gbend(j), L0(j))
+    a_kick = kick(pz, gbend(j), L0(j), z)
     pz = pz + a_kick
   enddo
-  pz= pz + cell_kick * (1.0e0 + 0.00001*sin(two_pi * 2.0 / 10.0 * z))  !restoring kick from induction cell
   pz = pz + barrier(z)
-  !if (abs(pz) .gt. 0.02) then
-  !  write(*,'(a,i12)') "Particle lost at turn ", i
-  !  exit
-  !endif
   z = z + alpha(pz)*pz*C0
   z = modulo(z+C0/2.0, C0) - C0/2.0
 enddo
@@ -155,17 +167,14 @@ contains
 
   function barrier(z)
     real(dp) barrier, z
-    real(dp) barrier_z, barrier_width
+    real(dp) barrier_width
     real(dp) barrier_kick, reset_kick
-    real(dp) E0, U0, pz0
+    real(dp) U0, pz0
 
-    barrier_z = 10.0 !C0 * 0.90
     barrier_width = 5.0
-    E0 = 1e9
     U0 = 45.3e3 
     pz0 = U0 / E0
 
-    !barrier_kick = 0.1 * pz0
     barrier_kick = 0.01 * pz0
     reset_kick = -10.0 * pz0
 
@@ -178,14 +187,19 @@ contains
     endif
   end function
 
-  function kick(pz,gbend,L0)
-    real(dp) kick, pz
-    real(dp) kick_d, kick_f
+  function kick(pz,gbend,L0,z)
+    real(dp) kick, pz, z
+    real(dp) kick_d, kick_f, kick_restore
     real(dp) gbend, L0
     !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2 - 1.0d0 )  !E restored
-    kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2)  !E not restored
+
+    !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( 1.0d0 + 2.0d0*pz + pz*pz )
+    kick_d = -1.0d0 * kd * (gbend**2) * L0 * (1.0d0+pz)**2
     kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0d0+pz)**2
-    kick = kick_d + kick_f
+
+    kick_restore = kd * (gbend**2) * L0 * (1.0d0 + mod_amp*sin(two_pi * 2.0d0 / barrier_z * z))
+
+    kick = kick_d + kick_f + kick_restore
   end function
 
   function xi()
