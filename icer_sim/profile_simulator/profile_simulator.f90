@@ -23,6 +23,7 @@ real(dp) mod_amp
 real(dp) I2, I3
 real(dp) sigma_p
 real(dp) barrier_z
+real(dp) mod_z
 
 real(dp) gbend(3)
 real(dp) L0(3)
@@ -90,7 +91,8 @@ kd = g0**3 * 2.0d0 * rc / 3.0d0 * (Jz/2.0d0)
 kf = g0**5 * 55.0*rc*hbar/24.0/sqrt(3.0)/(me/clight/clight)/clight
 
 !calculate nominal restoring kick
-barrier_z = 20.0 !C0 * 0.90
+barrier_z = 40.0 !C0 * 0.90
+mod_z = 10.0
 cell_kick = 0.0d0
 I2 = 0.0d0
 I3 = 0.0d0
@@ -104,8 +106,10 @@ sigma_p = sqrt(Cq * g0**2 * I3 / Jz / I2)
 write(*,'(a,es10.3,a,f10.3,a)') "Rad Int Energy Spread: ", sigma_p*100, "% (", sigma_p*E0/1000, " keV)"
 
 !modulation amplitude
-mod_amp = 0.0000100d0
+!mod_amp = 0.0000050d0
+mod_amp = 0.0000200d0
 write(*,'(a,f9.6,a,f8.3,a)') "Modulation amplitude is ", mod_amp*100, "% (", E0*mod_amp/1000, " keV)"
+write(*,'(a,f8.5,a,f9.5,a)') "Modulation period is ", mod_z, " meters (", clight / mod_z / 1e6, " MHz)"
 
 if(diags) then
   diffusion_parameter = 0.0d0
@@ -197,7 +201,7 @@ contains
     kick_d = -1.0d0 * kd * (gbend**2) * L0 * (1.0d0+pz)**2
     kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0d0+pz)**2
 
-    kick_restore = kd * (gbend**2) * L0 * (1.0d0 + mod_amp*sin(two_pi * 2.0d0 / barrier_z * z))
+    kick_restore = kd * (gbend**2) * L0 * (1.0d0 + mod_amp*sin(two_pi * z / mod_z))
 
     kick = kick_d + kick_f + kick_restore
   end function
