@@ -1,5 +1,4 @@
 program profile_simulator
-
 implicit none
 
 integer, parameter :: dp = 8
@@ -11,6 +10,7 @@ real(dp), parameter :: hbar = 6.582119569d-16 ! eV s
 real(dp), parameter :: me = 511000.0d0 ! eV / c^2
 real(dp), parameter :: Cq = 3.832e-13 ! m for e-
 
+real(dp) rrr
 real(dp) z, z0
 real(dp) pz, pz0
 real(dp) C0
@@ -19,11 +19,10 @@ real(dp) a_kick
 real(dp) Jz
 real(dp) kd, kf
 real(dp) cell_kick
-real(dp) mod_amp
+real(dp) rf_amp, rf_lambda
 real(dp) I2, I3
 real(dp) sigma_p
 real(dp) barrier_z
-real(dp) mod_z
 
 real(dp) gbend(3)
 real(dp) L0(3)
@@ -41,9 +40,7 @@ integer progress, last_progress
 character(20) in_file, out_file
 character(4) ix_str
 
-logical diags
-
-namelist /params/ z0, pz0, sigma_pz, n_turns_in, diags, n_report
+namelist /params/ z0, pz0, rf_amp, rf_lambda, sigma_pz, n_turns_in, n_report
 
 call random_seed()
 
@@ -54,8 +51,9 @@ n_turns_in=20.0e6
 z0 = 0.0d0
 pz0 = 0.0d0 !0.01 ! initial pz
 sigma_pz = -1
-diags = .false.
 n_report = 1
+rf_amp = 1.0 ! eV
+rf_lambda = 10.0 ! m
 
 call get_command_argument(1, in_file)
 call get_command_argument(2, ix_str)
@@ -92,7 +90,6 @@ kf = g0**5 * 55.0*rc*hbar/24.0/sqrt(3.0)/(me/clight/clight)/clight
 
 !calculate nominal restoring kick
 barrier_z = 40.0 !C0 * 0.90
-mod_z = 10.0
 cell_kick = 0.0d0
 I2 = 0.0d0
 I3 = 0.0d0
@@ -101,33 +98,18 @@ do j=1,3
   I3 = I3 + gbend(j)**3*L0(j)
   cell_kick = cell_kick + kd * L0(j) * gbend(j)**2
 enddo
-!write(*,*) "Cell kick: ", cell_kick
+write(*,*) "Cell kick: ", cell_kick
 sigma_p = sqrt(Cq * g0**2 * I3 / Jz / I2)
 write(*,'(a,es10.3,a,f10.3,a)') "Rad Int Energy Spread: ", sigma_p*100, "% (", sigma_p*E0/1000, " keV)"
 
 !modulation amplitude
-!mod_amp = 0.0000050d0
-mod_amp = 0.0000200d0
-write(*,'(a,f9.6,a,f8.3,a)') "Modulation amplitude is ", mod_amp*100, "% (", E0*mod_amp/1000, " keV)"
-write(*,'(a,f8.5,a,f9.5,a)') "Modulation period is ", mod_z, " meters (", clight / mod_z / 1e6, " MHz)"
-
-if(diags) then
-  diffusion_parameter = 0.0d0
-  do i=1,3
-    diffusion_parameter = diffusion_parameter + sqrt(kf*(gbend(i)**3)*L0(i))
-  enddo
-  write(*,*) "diffusion parameter: ", diffusion_parameter
-  !plot alpha(pz) for diagnostic output
-  open(10,file='sample_zpz.dat')
-  do i=1,500
-    pz = -0.05 + (i-1.0)*(0.05+0.05)/(500.0-1.0)
-    write(10,'(es14.4,es14.4)') pz, pz*alpha(pz)*C0
-  enddo
-  close(10)
-endif
+write(*,'(a,f9.6,a)') "Modulation amplitude is ", rf_amp, " eV"
+rf_amp = rf_amp / E0
+write(*,'(a,f8.5,a,f9.5,a)') "Modulation period is ", rf_lambda, " meters (", clight / rf_lambda / 1e6, " MHz)"
 
 pz = pz0
-z = z0
+call random_number(rrr)
+z = barrier_z - 2*barrier_z * rrr ! uniform distribution in the barrier
 write(out_file,'(a,i4.4,a)') 'z_',particle_id,'.dat'
 open(10,file=out_file)
 write(10,'(a14,a14,a14)') "# turn", "z", "pz"
@@ -193,17 +175,19 @@ contains
 
   function kick(pz,gbend,L0,z)
     real(dp) kick, pz, z
-    real(dp) kick_d, kick_f, kick_restore
+    real(dp) kick_d, kick_f, kick_rest_cell, kick_rest_rf
     real(dp) gbend, L0
     !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2 - 1.0d0 )  !E restored
 
     !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( 1.0d0 + 2.0d0*pz + pz*pz )
-    kick_d = -1.0d0 * kd * (gbend**2) * L0 * (1.0d0+pz)**2
-    kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0d0+pz)**2
 
-    kick_restore = kd * (gbend**2) * L0 * (1.0d0 + mod_amp*sin(two_pi * z / mod_z))
+    kick_d = -1.0d0 * kd * (gbend**2) * L0 * (1.0d0+pz)**2   ! Damping
+    kick_f = -sqrt(kf*(gbend**3)*L0) * xi() * (1.0d0+pz)**2  ! Quantum excitation
+    kick_rest_cell = kd * (gbend**2) * L0  ! Restoring kick from the cell (no modulation)
 
-    kick = kick_d + kick_f + kick_restore
+    kick_rest_rf = rf_amp * sin(two_pi * z / rf_lambda)  ! Kick from RF modulation
+
+    kick = kick_d + kick_f + kick_rest_cell + kick_rest_rf
   end function
 
   function xi()

@@ -1,9 +1,6 @@
 program profile_simulator
 
 use openacc
-use cudafor
-use curand
-use openacc
 
 implicit none
 
@@ -16,17 +13,17 @@ real(dp), parameter :: hbar = 6.582119569d-16 ! eV s
 real(dp), parameter :: me = 511000.0d0 ! eV / c^2
 real(dp), parameter :: Cq = 3.832e-13 ! m for e-
 
-integer, parameter :: n_particles = 1000
-integer, parameter :: BATCH_SIZE = 100 ! Tune based on GPU memory
-integer, parameter :: n_batches = (n_particles + BATCH_SIZE - 1) / BATCH_SIZE
 integer batch_id, local_id, global_id
 
+integer, allocatable :: file_units(:)
 
-real(dp) :: z_batch(BATCH_SIZE), pz_batch(BATCH_SIZE)
+integer, parameter :: n_particles = 1000
+integer, parameter :: n_turns = 1e6
+integer, parameter :: n_report = 1037
+real(dp) :: z(BATCH_SIZE), pz(BATCH_SIZE)
 real(dp) :: z_history(BATCH_SIZE, n_turns/n_report)
 real(dp) :: pz_history(BATCH_SIZE, n_turns/n_report)
 integer :: save_counter
-type(curandGenerator) :: gen
 
 real(dp) C0
 real(dp) g0, E0
@@ -42,42 +39,18 @@ real(dp) mod_z
 
 real(dp) gbend(3)
 real(dp) L0(3)
-real(dp) sigma_pz
-real(dp) n_turns_in !namelist doesn't support exponential integers
 real(dp) diffusion_parameter
 
-integer n_report
-integer(8) i, n_turns
+integer(8) i
 integer j, k
 integer particle_id
 integer ierr
 integer progress, last_progress
 
-character(20) in_file, out_file
+character(20) out_file
 character(4) ix_str
 
-namelist /params/ z0, pz0, sigma_pz, n_turns_in, n_report
-
-call setup_random_gpu(gen)
-
-
 last_progress = 0
-
-!beam description
-n_turns_in=20.0e6
-z0 = 0.0d0
-pz0 = 0.0d0 !0.01 ! initial pz
-sigma_pz = -1
-n_report = 1
-
-
-call get_command_argument(1, in_file)
-
-open(unit=10, file=in_file, status='old', action='read') !, iostat=ierr)
-read(10, nml=params) !, iostat=ierr)
-close(10)
-
-n_turns = n_turns_in
 
 !lattice description
 C0 = 119.587d0
@@ -145,7 +118,7 @@ do batch_id = 1, n_batches
 
       do j=1,3
         a_kick = kick_acc(pz, gbend(j), L0(j), z, &
-                          (batch_id-1)*BATCH_SIZE + local_id, i, j, gen)
+                          (batch_id-1)*BATCH_SIZE + local_id, i, j)
         pz = pz + a_kick
       enddo
       pz = pz + barrier_acc(z)
@@ -170,16 +143,17 @@ do batch_id = 1, n_batches
     endif
   enddo
   !$acc end data
+enddo
 
 contains
 
   function alpha_gpu(pz) result(alpha)
     real(dp), intent(in) :: pz
     real(dp) alpha
-    real(dp), parameter: a1 = -8.39e-5
-    real(dp), parameter: a2 = -9.605e-6
-    real(dp), parameter: a3 = 1.37e-4
-    real(dp), parameter: a4 = -2.07e-1
+    real(dp), parameter :: a1 = -8.39e-5
+    real(dp), parameter :: a2 = -9.605e-6
+    real(dp), parameter :: a3 = 1.37e-4
+    real(dp), parameter :: a4 = -2.07e-1
     !alpha = 1e-6 * pz - 2e-2 * pz**2 + 1e-0 * pz**3
     !tru zero
     ! a1 = 2.6112753e-07
@@ -210,59 +184,90 @@ contains
     endif
   end function
 
-  function kick_gpu(pz,gbend,L0,z, particle_id, turn, j, gen) result(kick)
+  function kick_gpu(pz,gbend,L0,z, particle_id, turn, j) result(kick)
     real(dp), intent(in) :: pz, gbend, L0, z
     integer, intent(in) :: particle_id, turn, j
-    real(dp) :: kick, kick_d, kick_f, kick_restore
-    real(dp) gbend, L0
-    type(curandGenerator) :: gen
+    real(dp) :: kick_d, kick_f, kick_restore, random_value
+    real(dp) :: kick
     !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( (1.0d0+pz)**2 - 1.0d0 )  !E restored
 
     !kick_d = -1.0d0 * kd * (gbend**2) * L0 * ( 1.0d0 + 2.0d0*pz + pz*pz )
     kick_d = -1.0d0 * kd * (gbend**2) * L0 * (1.0d0+pz)**2
-    kick_f = -sqrt(kf*(gbend**3)*L0) * xi(gen) * (1.0d0+pz)**2
+    kick_f = -sqrt(kf*(gbend**3)*L0) * xi_pseudo(gen) * (1.0d0+pz)**2
 
     kick_restore = kd * (gbend**2) * L0 * (1.0d0 + mod_amp*sin(two_pi * z / mod_z))
 
     kick = kick_d + kick_f + kick_restore
   end function
 
-  subroutine setup_random_gpu(gen)
-    type(curandGenerator), intent(out) :: gen
-    integer :: istat
-    integer :: time_values(8)
+  !$acc routine seq
+  function xi_pseudo(particle_id, turn, element)
+    integer :: particle_id, turn, element
+    real(dp) :: xi_pseudo, u1, u2
     integer(8) :: seed
 
-    ! Create the cuRAND generator
-    istat = curandCreateGenerator(gen, CURAND_RNG_PSEUDO_DEFAULT)
+    ! Combine IDs into unique seed
+    seed = int(particle_id, 8) * 982451653_8 + &
+           int(turn, 8) * 123456789_8 + &
+           int(element, 8) * 234567891_8
 
-    call date_and_time(values=time_values)
-    seed = int(time_values(8) + time_values(7)*1000 + time_values(6)*60000 + &
-               time_values(5)*3600000, 8)
+    u1 = hash_to_uniform(seed)
+    u2 = hash_to_uniform(seed + 1_8)
 
-    istat = curandSetPseudoRandomGeneratorSeed(gen, seed)
-  end subroutine
-
-  subroutine generate_uniform_gpu(gen, n, d_array)
-    type(curandGenerator) :: gen
-    integer :: n
-    real(dp), device :: d_array(*)
-    integer :: istat
-    
-    istat = curandGenerateUniformDouble(gen, d_array, n)
-  end subroutine
-
-  function xi(gen)
-    type(curandGenerator), intent(inout) :: gen
-    real(dp) xi
-    real(dp) u1, u2, z1, z2, istat
-    real(dp), device :: d_random(2)
-
-    call generate_uniform_gpu(gen, 2, d_random)
-    u1 = d_random(1)
-    u2 = d_random(2)
-    z1 = sqrt(-2.0_dp * log(u1)) * cos(two_pi * u2)
-    !z2 = sqrt(-2.0 * log(u1)) * sin(two_pi * u2)
-    xi = z1
+    xi_pseudo = sqrt(-2.0d0 * log(u1)) * cos(two_pi * u2)
   end function
+
+  !$acc routine seq
+  function hash_to_uniform(n)
+    integer(8) :: n, x
+    real(dp) :: hash_to_uniform
+
+    ! xorshift64
+    x = n
+    x = ieor(x, ishft(x, 13))
+    x = ieor(x, ishft(x, -7))
+    x = ieor(x, ishft(x, 17))
+
+    hash_to_uniform = abs(real(x, dp)) / 9223372036854775807.0d0
+  end function
+
+
+  !  subroutine setup_random_gpu(gen)
+  !    type(curandGenerator), intent(out) :: gen
+  !    integer :: istat
+  !    integer :: time_values(8)
+  !    integer(8) :: seed
+
+  !    ! Create the cuRAND generator
+  !    istat = curandCreateGenerator(gen, CURAND_RNG_PSEUDO_DEFAULT)
+
+  !    call date_and_time(values=time_values)
+  !    seed = int(time_values(8) + time_values(7)*1000 + time_values(6)*60000 + &
+  !               time_values(5)*3600000, 8)
+
+  !    istat = curandSetPseudoRandomGeneratorSeed(gen, seed)
+  !  end subroutine
+
+  !  subroutine generate_uniform_gpu(gen, n, d_array)
+  !    type(curandGenerator) :: gen
+  !    integer :: n
+  !    real(dp), device :: d_array(*)
+  !    integer :: istat
+  !    
+  !    istat = curandGenerateUniformDouble(gen, d_array, n)
+  !  end subroutine
+
+  ! function xi(gen)
+  !   type(curandGenerator), intent(inout) :: gen
+  !   real(dp) xi
+  !   real(dp) u1, u2, z1, z2, istat
+  !   real(dp), device :: d_random(2)
+
+  !   call generate_uniform_gpu(gen, 2, d_random)
+  !   u1 = d_random(1)
+  !   u2 = d_random(2)
+  !   z1 = sqrt(-2.0_dp * log(u1)) * cos(two_pi * u2)
+  !   !z2 = sqrt(-2.0 * log(u1)) * sin(two_pi * u2)
+  !   xi = z1
+  ! end function
 end program
