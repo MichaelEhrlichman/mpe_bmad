@@ -17,6 +17,7 @@ program tracker_icer
   character(4) part_ix_str
 
   real(rp) vec_offset(6), initial_vector(6)
+  real(rp) rrr, barrier_z, z
 
   track1_custom_ptr => track1_custom
   make_mat6_custom_ptr => make_mat6_custom
@@ -26,7 +27,7 @@ program tracker_icer
 
   read(part_ix_str,*) part_ix
 
-  n_turns = 20e6
+  n_turns = 1e6
 
   bp_com%always_parse = .true.
 
@@ -37,6 +38,8 @@ program tracker_icer
   bmad_com%radiation_fluctuations_on = .true.
 
   call twiss_and_track(lat,co,status)
+  write(*,*) "Closed orbit (0):   ", co(0)
+  write(*,*) "Closed orbit (end): ", co(lat%n_ele_track)
   !call closed_orbit_calc(lat,co,5)
   !call twiss_at_start(lat)
   !call twiss_propagate_all(lat)
@@ -50,7 +53,11 @@ program tracker_icer
 
   !vec_offset = (/ 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0 /)
   !initial_vector = co(0)%vec + vec_offset
+  call random_number(rrr)
+  barrier_z = 2.99
+  z = barrier_z - 2*barrier_z * rrr ! uniform distribution in the barrier
   initial_vector = 0.0d0
+  initial_vector(5) = z
   call init_coord(orbit(0),initial_vector,lat%ele(0),element_end=upstream_end$)
 
   !write(*,'(a,6es14.5)') "Closed Orbit:   ", co(0)%vec
